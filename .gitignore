@@ -1,0 +1,14 @@
+out/
+cache/
+broadcast/
+lib/
+node_modules/
+.env
+.env.local
+*.log
+dist/
+.next/
+coverage/
+lcov.info
+keeper/keys/
+*.tsbuildinfo

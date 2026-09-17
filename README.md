@@ -1,0 +1,65 @@
+# SEAT
+
+USDG desks that copy opted-in Stock Token traders on Robinhood Chain.
+
+Not affiliated with Robinhood Markets. Stock Tokens may be subject to
+jurisdictional restrictions and are not the same as directly owning shares.
+
+## What this repo is
+
+| Path | Job |
+|---|---|
+| `contracts/` | Desk factory, vault, risk, swap adapter |
+| `keeper/` | Watches leader fills, submits vault copies |
+| `app/` | Deposit / seats / fill tape |
+| `sdk/` | Official token registry + NAV math |
+| `docs/` | Litepaper and risk |
+
+## Chain
+
+- Mainnet `4663`
+- Testnet `46630`
+- Gas: ETH
+- Accounting asset: USDG (6 decimals)
+- v1 books: official NVDA, AAPL, SPY only
+
+## Status
+
+Phase 0 — paper copy. Do not deposit mainnet funds.
+
+## Quick start
+
+```bash
+git clone git@github.com:seat-hq/seat.git
+cd seat
+make install
+make test
+```
+
+Run the Phase 0 paper-copy engine (no private key required):
+
+```bash
+make paper
+```
+
+## Rules
+
+- No mint on `$SEAT`
+- No volume fee
+- NAV uses `balanceOfUI()`, not raw balances
+- After-hours size is smaller than cash-session size
+
+## Layout
+
+| File | Responsibility |
+|---|---|
+| `contracts/src/DeskFactory.sol` | Creates one `DeskVault` per leader |
+| `contracts/src/DeskVault.sol` | Holds USDG + allowlisted stock tokens, issues seat shares |
+| `contracts/src/RiskModule.sol` | Caps, session clock, drawdown halt, skip rules |
+| `contracts/src/SwapAdapter.sol` | Restricted swap adapter (no arbitrary calldata) |
+| `contracts/src/FeeModule.sol` | High-water performance fee + AUM accrual |
+| `contracts/src/SeatToken.sol` | Stub. Do not deploy until one desk has 30 live days |
+| `contracts/src/libraries/NavLib.sol` | USDG NAV from `balanceOfUI` x oracle price |
+
+Not affiliated with Robinhood Markets. This is not investment advice. See
+[`docs/not-affiliated.md`](docs/not-affiliated.md) and [`docs/risk.md`](docs/risk.md).

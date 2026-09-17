@@ -1,0 +1,26 @@
+{
+  "name": "seat",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Copy desks for official Stock Tokens on Robinhood Chain (4663)",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck && tsc -p tsconfig.json",
+    "paper": "pnpm --filter keeper exec tsx ../scripts/paper-copy.ts"
+  },
+  "dependencies": {
+    "@seat/sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
