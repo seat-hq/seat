@@ -12,3 +12,5 @@ coverage/
 lcov.info
 keeper/keys/
 *.tsbuildinfo
+docs/Idea.md
+docs/project_structure.md
