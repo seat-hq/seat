@@ -1,7 +1,9 @@
 out/
 cache/
 broadcast/
-lib/
+# Foundry deps only — do not ignore app/src/lib
+/lib/
+contracts/lib/
 node_modules/
 .env
 .env.local
@@ -11,6 +13,7 @@ dist/
 coverage/
 lcov.info
 keeper/keys/
+keeper/data/fills.json
 *.tsbuildinfo
 docs/Idea.md
 docs/project_structure.md

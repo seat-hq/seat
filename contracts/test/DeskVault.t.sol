@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
-import {Test} from "forge-std/Test.sol";
+import {Test, stdStorage, StdStorage} from "forge-std/Test.sol";
 import {DeskVault} from "../src/DeskVault.sol";
 import {RiskModule} from "../src/RiskModule.sol";
 import {SwapAdapter} from "../src/SwapAdapter.sol";
@@ -9,6 +9,7 @@ import {IRiskModule} from "../src/interfaces/IRiskModule.sol";
 import {MockERC20} from "./mocks/Mocks.sol";
 
 contract DeskVaultTest is Test {
+    using stdStorage for StdStorage;
     MockERC20 internal usdg;
     RiskModule internal risk;
     SwapAdapter internal swap;
@@ -128,5 +129,76 @@ contract DeskVaultTest is Test {
         _deposit(alice, 1_234e6);
         assertEq(vault.totalAssetsUsdg(), vault.cashUsdg());
         assertEq(vault.totalAssetsUsdg(), 1_234e6);
+    }
+
+    function test_ProcessWithdrawals_MultiRequest() public {
+        _deposit(alice, 1_000e6);
+        _deposit(bob, 1_000e6);
+        vault.pause();
+
+        vm.prank(alice);
+        uint256 aliceAssets = vault.redeem(400e6);
+        vm.prank(bob);
+        uint256 bobAssets = vault.redeem(300e6);
+
+        assertEq(vault.withdrawQueueLength(), 2);
+        // Shares burn on queue; cash stays until processWithdrawals.
+        assertEq(vault.totalAssetsUsdg(), 2_000e6);
+
+        vault.unpause();
+        uint256 aliceBefore = usdg.balanceOf(alice);
+        uint256 bobBefore = usdg.balanceOf(bob);
+        vault.processWithdrawals(10);
+
+        assertEq(usdg.balanceOf(alice), aliceBefore + aliceAssets);
+        assertEq(usdg.balanceOf(bob), bobBefore + bobAssets);
+        assertEq(vault.totalAssetsUsdg(), 2_000e6 - aliceAssets - bobAssets);
+        assertEq(vault.queueHead(), 2);
+    }
+
+    function test_ProcessWithdrawals_PartialByMaxCount() public {
+        _deposit(alice, 1_000e6);
+        vault.pause();
+
+        vm.prank(alice);
+        uint256 first = vault.redeem(400e6);
+        vm.prank(alice);
+        uint256 second = vault.redeem(300e6);
+        assertEq(vault.withdrawQueueLength(), 2);
+
+        vault.unpause();
+        uint256 before = usdg.balanceOf(alice);
+        vault.processWithdrawals(1);
+
+        assertEq(usdg.balanceOf(alice), before + first);
+        assertEq(vault.queueHead(), 1);
+        assertEq(vault.totalAssetsUsdg(), 1_000e6 - first);
+
+        vault.processWithdrawals(1);
+        assertEq(usdg.balanceOf(alice), before + first + second);
+        assertEq(vault.queueHead(), 2);
+        assertEq(vault.totalAssetsUsdg(), 1_000e6 - first - second);
+    }
+
+    function test_ProcessWithdrawals_StopsWhenCashShort() public {
+        _deposit(alice, 1_000e6);
+        vault.pause();
+
+        vm.prank(alice);
+        vault.redeem(700e6);
+        vm.prank(alice);
+        vault.redeem(300e6);
+        vault.unpause();
+
+        // Simulate cash consumed by a later-phase position: only 500 left,
+        // not enough for the 700 head. FIFO stops; neither request pays.
+        stdstore.target(address(vault)).sig("cashUsdg()").checked_write(uint256(500e6));
+        assertEq(vault.cashUsdg(), 500e6);
+
+        uint256 before = usdg.balanceOf(alice);
+        vault.processWithdrawals(10);
+        assertEq(usdg.balanceOf(alice), before);
+        assertEq(vault.queueHead(), 0);
+        assertEq(vault.withdrawQueueLength(), 2);
     }
 }

@@ -1,4 +1,4 @@
-# SEAT — Litepaper (Phase 0)
+# SEAT — Litepaper
 
 SEAT is a protocol for USDG-denominated **copy-trading desks** on Robinhood
 Chain. A desk mirrors the trades of an opted-in leader across a small set of
@@ -10,6 +10,18 @@ This document describes the concept. It makes **no guarantees** of returns and
 is **not investment advice**. See [`risk.md`](risk.md) and
 [`not-affiliated.md`](not-affiliated.md).
 
+## Status
+
+**Phase 0 is shipped** (paper copy, deterministic risk, no funds move).
+
+**Phase 1 is shipped on Robinhood testnet `46630`**: factory + cash vault
+deploy, USDG deposit/redeem in the blotter, keeper bound to `vault.leader()`,
+honest fill tape (`source=fixture|chain`). There is **no `$SEAT` token**.
+Stock Token copies stay paper/skip until the registry is verified. SEAT is
+**not affiliated** with Robinhood Markets.
+
+Nothing in this repository should be deposited against on mainnet (`4663`).
+
 ## Phase 0 — Paper Copy
 
 Phase 0 exists to prove the mechanism **without real money**:
@@ -19,7 +31,21 @@ Phase 0 exists to prove the mechanism **without real money**:
 - Execution is **paper only** — no router is configured and no funds move.
 - Every decision is explainable (why a fill was copied, resized, or skipped).
 
-Nothing in Phase 0 should be deposited against on mainnet.
+## Phase 1 — Testnet desks
+
+Phase 1 wires the cash vault to testnet:
+
+- `DeskFactory.createDesk(leader)` on `46630` (optional in the deploy script).
+- Depositors approve USDG and mint seat shares; redeem is instant when cash
+  is available, otherwise queued.
+- The app reads NAV, shares, cash, and leader from the vault. Deposit/redeem
+  are enabled only when connected on `46630` with a real vault address.
+- The keeper does **not** pick a leader. It reads `vault.leader()` (or an
+  explicit `LEADER_ADDRESS` fallback).
+- Fill tape rows are labeled `source=fixture` or `source=chain`. Fixtures are
+  never labeled live.
+- Live execution still fails closed: no SwapAdapter router, unverified
+  registry, and mainnet `4663` is a hard error.
 
 ## Accounting
 
@@ -29,6 +55,7 @@ Nothing in Phase 0 should be deposited against on mainnet.
 - Seat NAV = desk equity ÷ outstanding seat shares.
 - Token balances use the authoritative `balanceOfUI()` supported-balance
   interface, never raw ERC-20 `balanceOf()`.
+- Phase 1 vaults are cash-only, so NAV equals USDG cash.
 
 ## Sessions
 
@@ -45,11 +72,11 @@ closed (does not trade).
 | `RiskModule` | Caps, session clock, drawdown halt, skip rules |
 | `SwapAdapter` | Restricted swap surface (no arbitrary calldata) |
 | `FeeModule` | High-water performance fee + AUM accrual |
-| `SeatToken` | Governance stub — not deployed in Phase 0 |
+| `SeatToken` | Governance stub — not deployed in Phase 0 or Phase 1 |
 
 ## Roadmap (non-binding)
 
-1. **Phase 0** — paper copy, deterministic risk, full test coverage.
-2. **Phase 1** — testnet deposits/redeems, read-only UI on real data.
+1. **Phase 0** — paper copy, deterministic risk, full test coverage. **Shipped.**
+2. **Phase 1** — testnet deposits/redeems, blotter on real 46630 data. **Shipped.**
 3. **Later** — verified router integration, live desks, governance token
    (only after a desk has 30 live days).

@@ -9,7 +9,9 @@
  * paper-execute -> recompute NAV -> update high-water / drawdown halt.
  */
 import {
+  CHAIN,
   calculateNav,
+  isTradeEligible,
   navPerShare,
   type NavOptions,
   type Position,
@@ -18,8 +20,8 @@ import {
 import { normalizeFill, type CopySignal, type LeaderFill } from "./signaler.js";
 import { getSessionState, type SessionState } from "./session.js";
 
-/** Phase 0 permits paper execution only. */
-export type ExecutionMode = "PAPER";
+/** PAPER is the Phase 1 default. LIVE always fails closed (no router). */
+export type ExecutionMode = "PAPER" | "LIVE";
 
 export interface CopyConfig {
   /** Fraction of the leader's notional to copy, in bps (e.g. 500 = 5%). */
@@ -275,7 +277,7 @@ export class PaperExecutor {
     const requested = (env.EXECUTION_MODE ?? "PAPER").toUpperCase();
     if (requested !== "PAPER") {
       throw new Error(
-        `PaperExecutor refuses to run in mode ${requested}: Phase 0 is paper-only`,
+        `PaperExecutor refuses to run in mode ${requested}: use LiveExecutor for LIVE`,
       );
     }
   }
@@ -328,6 +330,64 @@ export class PaperExecutor {
   }
 }
 
+/**
+ * Live path. Throws unless CHAIN_ID===46630 AND a router is configured AND
+ * the symbol is trade-eligible. CHAIN_ID===4663 is always a hard error.
+ * Phase 1 has no SwapAdapter router, so this never submits.
+ */
+export class LiveExecutor {
+  readonly mode: ExecutionMode = "LIVE";
+
+  constructor(
+    opts: { chainId: number; routerConfigured: boolean },
+    env: Record<string, string | undefined> = process.env,
+  ) {
+    const chainId = Number(env.CHAIN_ID ?? opts.chainId);
+    if (chainId === CHAIN.MAINNET_ID) {
+      throw new Error(
+        "LiveExecutor hard-refuse: CHAIN_ID=4663 (mainnet) is not allowed",
+      );
+    }
+    if (chainId !== CHAIN.TESTNET_ID) {
+      throw new Error(
+        `LiveExecutor refuses chain ${chainId}; only testnet 46630`,
+      );
+    }
+    if (!opts.routerConfigured) {
+      throw new Error(
+        "LiveExecutor refuses: SwapAdapter router is not configured",
+      );
+    }
+  }
+
+  execute(signal: CopySignal, _decision: Decision, _state: RiskState): bigint {
+    if (!isTradeEligible(signal.symbol)) {
+      throw new Error(
+        `LiveExecutor refuses unverified registry symbol ${signal.symbol}`,
+      );
+    }
+    throw new Error("LiveExecutor: Phase 1 has no live submit path");
+  }
+}
+
+export interface CopyExecutor {
+  execute(signal: CopySignal, decision: Decision, state: RiskState): bigint;
+}
+
+/** PAPER unless EXECUTION_MODE=LIVE *and* live guards pass (they do not in Phase 1). */
+export function createExecutor(
+  market: MarketModel,
+  env: Record<string, string | undefined> = process.env,
+): CopyExecutor {
+  const mode = (env.EXECUTION_MODE ?? "PAPER").toUpperCase();
+  const chainId = Number(env.CHAIN_ID ?? CHAIN.TESTNET_ID);
+  const routerConfigured = env.SWAP_ROUTER_CONFIGURED === "1";
+  if (mode === "LIVE") {
+    return new LiveExecutor({ chainId, routerConfigured }, env);
+  }
+  return new PaperExecutor(market, env);
+}
+
 /** Update high-water NAV/share and set the halt flag if drawdown is breached. */
 function updateDrawdown(
   state: RiskState,
@@ -350,7 +410,7 @@ export interface ProcessDeps {
   readonly copy: CopyConfig;
   readonly risk: RiskConfig;
   readonly market: MarketModel;
-  readonly executor: PaperExecutor;
+  readonly executor: CopyExecutor;
   /** Optional override for "now"; defaults to the fill timestamp. */
   readonly now?: Date;
 }

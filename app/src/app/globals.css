@@ -39,9 +39,53 @@ a {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: 16px;
   border-bottom: 1px solid var(--line);
   padding-bottom: 12px;
   margin-bottom: 24px;
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.wallet-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.mono {
+  font-variant-numeric: tabular-nums;
+}
+
+.warn-text {
+  color: var(--warn);
+  font-size: 12px;
+}
+
+.ok-text {
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.banner {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--warn);
+  color: var(--warn);
+  border-radius: 6px;
+  background: var(--panel-2);
+}
+
+.note {
+  margin-top: 12px;
+  color: var(--accent);
 }
 
 .brand {
@@ -159,6 +203,26 @@ tr:last-child td {
   display: flex;
   gap: 12px;
   margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.field {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.input {
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-width: 140px;
+}
+
+.input:disabled {
+  color: var(--ink-dim);
 }
 
 .btn {
@@ -168,4 +232,14 @@ tr:last-child td {
   border-radius: 6px;
   padding: 10px 16px;
   cursor: not-allowed;
+}
+
+.btn-on {
+  color: var(--ink);
+  border-color: var(--accent);
+  cursor: pointer;
+}
+
+.btn-on:hover:not(:disabled) {
+  background: var(--panel);
 }
