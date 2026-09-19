@@ -1,9 +1,10 @@
 /**
  * Indexer: sources leader fills for the signaler.
  *
- * Phase 0 uses {@link StaticFillSource} (in-memory, deterministic) so the paper
- * engine is fully reproducible. {@link LiveFillSource} is a stub that refuses to
- * run — there is no live indexing path in Phase 0.
+ * Phase 1 uses {@link StaticFillSource} (in-memory, deterministic).
+ * {@link LiveFillSource} is a documented stub: chain logs cannot be decoded
+ * yet, so it returns no fills and logs `source=fixture`. It does not invent
+ * leader history.
  */
 import type { LeaderFill } from "./signaler.js";
 
@@ -26,17 +27,20 @@ export class StaticFillSource implements FillSource {
   }
 }
 
-/** Placeholder for a real on-chain/WS indexer. Not implemented in Phase 0. */
+/**
+ * Placeholder for a real on-chain/WS indexer.
+ * Returns an empty tape and logs source=fixture — does not invent fills.
+ */
 export class LiveFillSource implements FillSource {
   constructor(private readonly rpcUrl: string) {}
 
   fetchFills(): Promise<readonly LeaderFill[]> {
-    return Promise.reject(
-      new Error(
-        `LiveFillSource is not implemented in Phase 0 (paper only). rpc=${
-          this.rpcUrl ? "<set>" : "<unset>"
-        }`,
-      ),
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[indexer] LiveFillSource: chain logs not decoded yet; source=fixture (empty). rpc=${
+        this.rpcUrl ? "<set>" : "<unset>"
+      }`,
     );
+    return Promise.resolve([]);
   }
 }

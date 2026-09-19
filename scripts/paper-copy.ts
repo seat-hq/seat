@@ -17,6 +17,7 @@ import {
   type FillOutcome,
   type RiskConfig,
 } from "../keeper/src/executor.js";
+import { recordOutcome, writeFillTape } from "../keeper/src/fills.js";
 import { buildStaticMarket, type StaticQuote } from "../keeper/src/market.js";
 import type { LeaderFill } from "../keeper/src/signaler.js";
 
@@ -156,6 +157,18 @@ function main(): void {
         o.reason,
     );
   }
+
+  writeFillTape(
+    outcomes.map((o, i) =>
+      recordOutcome(o, {
+        desk: null,
+        leader: FILLS[i]?.leader ?? "0xleader",
+        slippageBps: market.slippageBps,
+        source: "fixture",
+        timestamp: new Date(FILLS[i]?.timestampMs ?? 0).toISOString(),
+      }),
+    ),
+  );
 
   const executedCount = outcomes.filter((o) => o.executedUsdg > 0n).length;
   const totalExecuted = outcomes.reduce((a, o) => a + o.executedUsdg, 0n);
