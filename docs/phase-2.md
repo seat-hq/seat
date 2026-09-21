@@ -104,6 +104,8 @@ ticks or mint a position in the script.
 
 ## Guarded deploy
 
+Step-by-step checklist: [`mainnet-day.md`](mainnet-day.md).
+
 ```bash
 # requires both confirms in local .env — does not run otherwise
 CONFIRM_MAINNET=I_UNDERSTAND CONFIRM_SEAT_TGE=I_UNDERSTAND make deploy-phase2

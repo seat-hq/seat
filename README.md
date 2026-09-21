@@ -35,8 +35,9 @@ The app falls back to the paper blotter when the connected chain has no vault.
 
 See [`docs/phase-1.md`](docs/phase-1.md) for the testnet runbook,
 [`docs/phase-1-live.md`](docs/phase-1-live.md) for cited 4663 MAG7 / feeds /
-SwapRouter02 and the $50k cap, and [`docs/phase-2.md`](docs/phase-2.md) for
-`$SEAT` + open desks.
+SwapRouter02 and the $50k cap, [`docs/phase-2.md`](docs/phase-2.md) for
+`$SEAT` + open desks, and [`docs/mainnet-day.md`](docs/mainnet-day.md) when
+you are ready to broadcast Phase 2 on 4663.
 
 ## Quick start
 
