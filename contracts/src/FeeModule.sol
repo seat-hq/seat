@@ -5,8 +5,8 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title FeeModule
 /// @notice Fee math for desks: high-water-mark performance fee, time-based AUM
-///         fee, and protocol/leader split. Pure math + owner-set params. There
-///         is NO volume fee (by design). All amounts in USDG base units.
+///         fee, and 70/20/10 leader/protocol/staker split. Pure math + owner-set
+///         params. There is NO volume fee (by design). Amounts in USDG base units.
 contract FeeModule is Ownable {
     uint256 internal constant BPS = 10_000;
     uint256 internal constant YEAR = 365 days;
@@ -16,18 +16,26 @@ contract FeeModule is Ownable {
         uint16 performanceFeeBps;
         /// @dev Annualized AUM fee, in bps per year.
         uint16 aumFeeBpsPerYear;
-        /// @dev Protocol's share of any fee, in bps (remainder goes to leader).
+        /// @dev Protocol's share of any fee, in bps.
         uint16 protocolShareBps;
+        /// @dev Stakers' share of any fee, in bps. Remainder goes to the leader.
+        uint16 stakerShareBps;
     }
 
     struct FeeSplit {
         uint256 protocolUsdg;
         uint256 leaderUsdg;
+        uint256 stakerUsdg;
     }
 
     FeeParams public params;
 
-    event ParamsUpdated(uint16 performanceFeeBps, uint16 aumFeeBpsPerYear, uint16 protocolShareBps);
+    event ParamsUpdated(
+        uint16 performanceFeeBps,
+        uint16 aumFeeBpsPerYear,
+        uint16 protocolShareBps,
+        uint16 stakerShareBps
+    );
 
     constructor(address initialOwner, FeeParams memory initialParams) Ownable(initialOwner) {
         _setParams(initialParams);
@@ -39,9 +47,9 @@ contract FeeModule is Ownable {
 
     function _setParams(FeeParams memory p) internal {
         require(p.performanceFeeBps <= BPS, "perf>100%");
-        require(p.protocolShareBps <= BPS, "proto>100%");
+        require(uint256(p.protocolShareBps) + uint256(p.stakerShareBps) <= BPS, "split>100%");
         params = p;
-        emit ParamsUpdated(p.performanceFeeBps, p.aumFeeBpsPerYear, p.protocolShareBps);
+        emit ParamsUpdated(p.performanceFeeBps, p.aumFeeBpsPerYear, p.protocolShareBps, p.stakerShareBps);
     }
 
     /// @notice Performance fee on realized profit above the high-water mark.
@@ -54,9 +62,14 @@ contract FeeModule is Ownable {
         return (aumUsdg * params.aumFeeBpsPerYear * elapsedSec) / (BPS * YEAR);
     }
 
-    /// @notice Split a fee into protocol and leader portions.
+    /// @notice Split a fee into protocol, staker, and leader portions.
     function splitFee(uint256 feeUsdg) public view returns (FeeSplit memory) {
         uint256 protocolUsdg = (feeUsdg * params.protocolShareBps) / BPS;
-        return FeeSplit({protocolUsdg: protocolUsdg, leaderUsdg: feeUsdg - protocolUsdg});
+        uint256 stakerUsdg = (feeUsdg * params.stakerShareBps) / BPS;
+        return FeeSplit({
+            protocolUsdg: protocolUsdg,
+            stakerUsdg: stakerUsdg,
+            leaderUsdg: feeUsdg - protocolUsdg - stakerUsdg
+        });
     }
 }

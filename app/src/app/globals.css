@@ -243,3 +243,19 @@ tr:last-child td {
 .btn-on:hover:not(:disabled) {
   background: var(--panel);
 }
+
+.chip {
+  background: var(--panel-2);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-right: 6px;
+  margin-top: 4px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.chip-on {
+  border-color: var(--accent);
+}

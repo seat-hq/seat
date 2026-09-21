@@ -7,6 +7,7 @@ import {DeskVault} from "../src/DeskVault.sol";
 import {RiskModule} from "../src/RiskModule.sol";
 import {SwapAdapter} from "../src/SwapAdapter.sol";
 import {MockERC20} from "./mocks/Mocks.sol";
+import {SeatToken} from "../src/SeatToken.sol";
 
 contract DeskFactoryTest is Test {
     MockERC20 internal usdg;
@@ -60,5 +61,56 @@ contract DeskFactoryTest is Test {
         assertTrue(first != second);
         assertEq(DeskVault(second).leader(), otherLeader);
         assertEq(factory.deskCount(), 2);
+    }
+
+    function test_ListDesk_PostsBond() public {
+        SeatToken seat = new SeatToken(alice);
+        factory.setListingParams(address(seat), 100_000 ether);
+        vm.startPrank(alice);
+        seat.approve(address(factory), 100_000 ether);
+        address vault = factory.listDesk(leader);
+        vm.stopPrank();
+
+        assertEq(DeskVault(vault).leader(), leader);
+        assertEq(factory.bondOf(vault), 100_000 ether);
+        assertEq(factory.bonderOf(vault), alice);
+        assertEq(seat.balanceOf(address(factory)), 100_000 ether);
+        assertEq(factory.deskCount(), 1);
+    }
+
+    function test_ListDesk_NotConfigured_Reverts() public {
+        vm.expectRevert(DeskFactory.ListingNotConfigured.selector);
+        factory.listDesk(leader);
+    }
+
+    function test_ListDesk_DuplicateLeader_Reverts() public {
+        SeatToken seat = new SeatToken(alice);
+        factory.setListingParams(address(seat), 1 ether);
+        vm.startPrank(alice);
+        seat.approve(address(factory), 2 ether);
+        factory.listDesk(leader);
+        vm.expectRevert(abi.encodeWithSelector(DeskFactory.DeskExists.selector, leader));
+        factory.listDesk(leader);
+        vm.stopPrank();
+    }
+
+    function test_ReturnBond() public {
+        SeatToken seat = new SeatToken(alice);
+        factory.setListingParams(address(seat), 50_000 ether);
+        vm.startPrank(alice);
+        seat.approve(address(factory), 50_000 ether);
+        address vault = factory.listDesk(leader);
+        vm.stopPrank();
+
+        uint256 before = seat.balanceOf(alice);
+        factory.returnBond(vault);
+        assertEq(seat.balanceOf(alice), before + 50_000 ether);
+        assertEq(factory.bondOf(vault), 0);
+    }
+
+    function test_ReturnBond_NoBond_Reverts() public {
+        address vault = factory.createDesk(leader);
+        vm.expectRevert(DeskFactory.NoBond.selector);
+        factory.returnBond(vault);
     }
 }

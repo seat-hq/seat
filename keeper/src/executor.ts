@@ -19,6 +19,7 @@ import {
 } from "@seat/sdk";
 import { normalizeFill, type CopySignal, type LeaderFill } from "./signaler.js";
 import { getSessionState, type SessionState } from "./session.js";
+import { submitExecuteCopy } from "./submit.js";
 
 /** PAPER is the Phase 1 default. LIVE always fails closed (no router). */
 export type ExecutionMode = "PAPER" | "LIVE";
@@ -331,26 +332,25 @@ export class PaperExecutor {
 }
 
 /**
- * Live path. Throws unless CHAIN_ID===46630 AND a router is configured AND
- * the symbol is trade-eligible. CHAIN_ID===4663 is always a hard error.
- * Phase 1 has no SwapAdapter router, so this never submits.
+ * Live path. Throws unless CHAIN_ID is 4663 or 46630 AND a router is
+ * configured AND the symbol is trade-eligible on that chain.
+ * 46630 has no cited router. 4663 uses ExactInputRouter02 around SwapRouter02.
  */
 export class LiveExecutor {
   readonly mode: ExecutionMode = "LIVE";
+  private readonly env: Record<string, string | undefined>;
+  private readonly chainId: number;
 
   constructor(
     opts: { chainId: number; routerConfigured: boolean },
     env: Record<string, string | undefined> = process.env,
   ) {
+    this.env = env;
     const chainId = Number(env.CHAIN_ID ?? opts.chainId);
-    if (chainId === CHAIN.MAINNET_ID) {
+    this.chainId = chainId;
+    if (chainId !== CHAIN.MAINNET_ID && chainId !== CHAIN.TESTNET_ID) {
       throw new Error(
-        "LiveExecutor hard-refuse: CHAIN_ID=4663 (mainnet) is not allowed",
-      );
-    }
-    if (chainId !== CHAIN.TESTNET_ID) {
-      throw new Error(
-        `LiveExecutor refuses chain ${chainId}; only testnet 46630`,
+        `LiveExecutor refuses chain ${chainId}; only Robinhood 4663 or 46630`,
       );
     }
     if (!opts.routerConfigured) {
@@ -361,12 +361,22 @@ export class LiveExecutor {
   }
 
   execute(signal: CopySignal, _decision: Decision, _state: RiskState): bigint {
-    if (!isTradeEligible(signal.symbol)) {
+    if (!isTradeEligible(signal.symbol, this.chainId)) {
       throw new Error(
         `LiveExecutor refuses unverified registry symbol ${signal.symbol}`,
       );
     }
-    throw new Error("LiveExecutor: Phase 1 has no live submit path");
+    throw new Error(
+      "LiveExecutor.execute is paper-sync; call submitCopy after a cited router",
+    );
+  }
+
+  async submitCopy(
+    signal: CopySignal,
+    decision: Decision,
+    session: string,
+  ): Promise<`0x${string}`> {
+    return submitExecuteCopy(signal, decision, session, this.env);
   }
 }
 
@@ -374,7 +384,7 @@ export interface CopyExecutor {
   execute(signal: CopySignal, decision: Decision, state: RiskState): bigint;
 }
 
-/** PAPER unless EXECUTION_MODE=LIVE *and* live guards pass (they do not in Phase 1). */
+/** PAPER unless EXECUTION_MODE=LIVE *and* live guards pass. */
 export function createExecutor(
   market: MarketModel,
   env: Record<string, string | undefined> = process.env,

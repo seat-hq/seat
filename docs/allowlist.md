@@ -12,8 +12,13 @@ identified by symbol, name, or metadata alone.
 | `unverified` | Candidate under review, not yet confirmed | No |
 | `verified` | Address, issuer, decimals authoritatively confirmed | Only if also `enabled` |
 
-The initial entries (NVDA, AAPL, SPY) ship as **`placeholder`** with `null`
-address, issuer, and decimals. **No addresses are invented in this repository.**
+The initial v1 names (NVDA, AAPL, SPY) stay **`placeholder` on testnet
+46630** (not on the official testnet contracts table). On **mainnet 4663**
+they are **`verified` + `enabled`** with cited addresses, bytecode, and
+Chainlink feeds. Official testnet names (TSLA, AMZN, PLTR, NFLX, AMD) stay
+**`unverified`** until a 46630 Chainlink feed is published. **No addresses
+are invented. Do not copy 4663 rows onto 46630.** See
+[`phase-1-live.md`](phase-1-live.md).
 
 ## Promotion process (required before any reliance)
 
@@ -30,7 +35,7 @@ To move an entry from `placeholder`/`unverified` to `verified`:
 
 ## Fail-closed guarantee
 
-`isTradeEligible()` returns `true` only for entries that are `verified`,
-`enabled`, and have a concrete address and decimals. Everything else — including
-all Phase 0 placeholders — returns `false`, so the system cannot trade an
-unverified asset.
+`isTradeEligible(symbol, chainId)` returns `true` only for entries that are
+`verified`, `enabled`, and have a concrete address, decimals, and cited feed
+**on that chain**. Everything else — including all 46630 placeholders —
+returns `false`.

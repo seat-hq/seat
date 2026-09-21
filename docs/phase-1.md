@@ -1,7 +1,9 @@
 # Phase 1 runbook — testnet desks (46630)
 
 **Status: shipped** on Robinhood testnet `46630` after a real USDG
-deposit/redeem path on the blotter.
+deposit/redeem path on the blotter. Live Stock Token copies stay
+fail-closed until a cited 46630 router and feed exist — see
+[`phase-1-live.md`](phase-1-live.md).
 
 Phase 1 wires Phase 0’s cash vault and factory to **Robinhood testnet
 `46630`**. It does **not** deploy `$SEAT`, does **not** set a SwapAdapter
@@ -95,9 +97,10 @@ tape, and appends outcomes to `keeper/data/fills.json` with
 `source=fixture`. The app’s `/api/fills` serves that file. Fixtures are
 never labeled live.
 
-`LiveExecutor` throws unless `CHAIN_ID===46630` **and** a router is
-configured **and** the symbol is `isTradeEligible`. `CHAIN_ID===4663` is
-always a hard error. Phase 1 has no router, so the live path never submits.
+`LiveExecutor` throws unless `CHAIN_ID` is **4663 or 46630**, a router is
+configured, **and** the symbol is `isTradeEligible` on that chain.
+`CHAIN_ID=4663` is allowed for the capped desk. Phase 1 testnet has no
+router, so the 46630 live path never submits.
 
 ## 7. Verify without testnet keys
 
@@ -110,8 +113,29 @@ make paper
 If `RH_TESTNET_RPC_URL`, `USDG_ADDRESS`, and a key are missing, stop after
 this dry-run. Do not fabricate addresses in `addresses.ts`.
 
+## 8. Capped mainnet desk (4663)
+
+Facts (USDG, NVDA/AAPL/SPY, Chainlink feeds, SwapRouter02) are in
+[`phase-1-live.md`](phase-1-live.md). Code path:
+
+1. `DeskVault.setDepositCap(50_000e6)` — Idea.md $50k cap.
+2. `ExactInputRouter02` wraps cited Uniswap SwapRouter02 (`exactInputSingle`,
+   fee 3000).
+3. `DeployMainnet` wires oracle feeds + allowlisted MAG7 + createDesk.
+4. Never deploys `SeatToken`. Refuses unless `CONFIRM_MAINNET=I_UNDERSTAND`
+   and `chainid == 4663`.
+
+```bash
+# after filling RH_RPC_URL, OWNER, LEADER_ADDRESS, PRIVATE_KEY
+CONFIRM_MAINNET=I_UNDERSTAND make deploy-mainnet
+pnpm exec tsx scripts/write-addresses.ts
+```
+
+Do not broadcast from this repo unless those env vars are set on purpose.
+The 46630 cash vault is unchanged (immutable, no router).
+
 ## Out of scope for Phase 1
 
-Stock Token swaps, oracle NAV with positions, FeeModule hooked into the
-vault, `$SEAT`, and mainnet deposit cap. The 46630 deposit/redeem path is
-proven; merging this branch to `main` is a repo step, not a product gate.
+`$SEAT` / `SeatToken`, extra leaders, and ungated mainnet AUM. Those
+moved to Phase 2 — see [`phase-2.md`](phase-2.md). The 30-day live wait
+was skipped by choice.

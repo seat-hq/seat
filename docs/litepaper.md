@@ -16,11 +16,18 @@ is **not investment advice**. See [`risk.md`](risk.md) and
 
 **Phase 1 is shipped on Robinhood testnet `46630`**: factory + cash vault
 deploy, USDG deposit/redeem in the blotter, keeper bound to `vault.leader()`,
-honest fill tape (`source=fixture|chain`). There is **no `$SEAT` token**.
-Stock Token copies stay paper/skip until the registry is verified. SEAT is
-**not affiliated** with Robinhood Markets.
+honest fill tape (`source=fixture|chain`). A **$50k-capped** mainnet desk
+is wired in code (cited MAG7 + SwapRouter02); it is **not** broadcast
+unless `CONFIRM_MAINNET=I_UNDERSTAND`.
 
-Nothing in this repository should be deposited against on mainnet (`4663`).
+**Phase 2 code is shipped**: 1B `$SEAT` (no mint), 70/20/10 fees,
+stake-to-list, extra desks, 12-month LP locker. TGE on 4663 still needs
+`CONFIRM_MAINNET` **and** `CONFIRM_SEAT_TGE`. See
+[`phase-2.md`](phase-2.md). SEAT is **not affiliated** with Robinhood
+Markets.
+
+Do not deposit on mainnet (`4663`) until a capped vault address is recorded
+from a real `DeployMainnet` or `DeployPhase2` broadcast.
 
 ## Phase 0 — Paper Copy
 
@@ -39,13 +46,14 @@ Phase 1 wires the cash vault to testnet:
 - Depositors approve USDG and mint seat shares; redeem is instant when cash
   is available, otherwise queued.
 - The app reads NAV, shares, cash, and leader from the vault. Deposit/redeem
-  are enabled only when connected on `46630` with a real vault address.
+  are enabled when connected on `46630` or `4663` with a real vault address
+  (4663 also enforces the $50k deposit cap).
 - The keeper does **not** pick a leader. It reads `vault.leader()` (or an
   explicit `LEADER_ADDRESS` fallback).
 - Fill tape rows are labeled `source=fixture` or `source=chain`. Fixtures are
   never labeled live.
-- Live execution still fails closed: no SwapAdapter router, unverified
-  registry, and mainnet `4663` is a hard error.
+- Live execution fails closed on 46630 (no router). On 4663 it requires
+  `ExactInputRouter02` + `isTradeEligible(symbol, 4663)`.
 
 ## Accounting
 
@@ -71,12 +79,18 @@ closed (does not trade).
 | `DeskVault` | Holds USDG + Stock Tokens, issues seat shares |
 | `RiskModule` | Caps, session clock, drawdown halt, skip rules |
 | `SwapAdapter` | Restricted swap surface (no arbitrary calldata) |
-| `FeeModule` | High-water performance fee + AUM accrual |
-| `SeatToken` | Governance stub — not deployed in Phase 0 or Phase 1 |
+| `FeeModule` | High-water performance fee + AUM accrual; 70/20/10 split on Phase 2 |
+| `SeatToken` | Fixed 1B `$SEAT`, no mint — TGE via guarded `DeployPhase2` |
+| `StakingPool` | Stake `$SEAT`, claim USDG from desk fees |
+| `LpLocker` | 12-month lock of a Uniswap v3 position NFT |
 
 ## Roadmap (non-binding)
 
 1. **Phase 0** — paper copy, deterministic risk, full test coverage. **Shipped.**
 2. **Phase 1** — testnet deposits/redeems, blotter on real 46630 data. **Shipped.**
-3. **Later** — verified router integration, live desks, governance token
-   (only after a desk has 30 live days).
+   Capped mainnet desk ($50k MAG7) is wired; broadcast is guarded.
+3. **Phase 2** — extra desks + `$SEAT` (1B, no mint), 70/20/10, stake-to-list,
+   12-month LP lock. **Code shipped;** TGE needs dual CONFIRM. See
+   [`phase-2.md`](phase-2.md).
+4. **Later** — buyback-and-burn, vesting, merkle airdrop, ungated AUM,
+   Phase 3 tools.

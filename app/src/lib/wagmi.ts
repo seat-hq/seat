@@ -1,7 +1,7 @@
 /**
  * wagmi / viem configuration for Robinhood Chain.
  *
- * Default chain is testnet 46630. Writes are refused on mainnet 4663
+ * Default chain is testnet 46630. Mainnet writes require a wired 4663 vault
  * (see canWriteOnChain). RPC URLs come from env; placeholder hosts keep
  * the app type-checking when unset.
  */

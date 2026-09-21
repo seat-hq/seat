@@ -19,16 +19,17 @@ contract DeskVaultTest is Test {
     address internal keeper = makeAddr("keeper");
     address internal alice = makeAddr("alice");
     address internal bob = makeAddr("bob");
-    address internal token = makeAddr("nvda");
+    MockERC20 internal token;
 
     function setUp() public {
         usdg = new MockERC20("USD Gateway", "USDG", 6);
+        token = new MockERC20("NVDA", "NVDA", 18);
         risk = new RiskModule(address(this));
         swap = new SwapAdapter(address(this));
         vault = new DeskVault(address(this), address(usdg), risk, swap, leader);
 
         risk.configureDesk(address(vault), 2_000e6, 5_000e6, 10_000e6, 2_000, 120);
-        risk.setTokenAllowed(address(vault), token, true);
+        risk.setTokenAllowed(address(vault), address(token), true);
         risk.setSessionRisk(address(vault), IRiskModule.Session.Regular, 10_000);
         vault.setKeeper(keeper);
 
@@ -110,13 +111,13 @@ contract DeskVaultTest is Test {
         // router configured, so execution reverts (fail closed).
         vm.prank(keeper);
         vm.expectRevert(SwapAdapter.RouterNotConfigured.selector);
-        vault.executeCopy(token, true, 1_000e6, IRiskModule.Session.Regular, block.timestamp);
+        vault.executeCopy(address(token), true, 1_000e6, IRiskModule.Session.Regular, block.timestamp, 1);
     }
 
     function test_ExecuteCopy_OnlyKeeper() public {
         vm.prank(alice);
         vm.expectRevert(DeskVault.NotKeeper.selector);
-        vault.executeCopy(token, true, 1_000e6, IRiskModule.Session.Regular, block.timestamp);
+        vault.executeCopy(address(token), true, 1_000e6, IRiskModule.Session.Regular, block.timestamp, 1);
     }
 
     function test_Pause_OnlyOwner() public {
@@ -129,6 +130,30 @@ contract DeskVaultTest is Test {
         _deposit(alice, 1_234e6);
         assertEq(vault.totalAssetsUsdg(), vault.cashUsdg());
         assertEq(vault.totalAssetsUsdg(), 1_234e6);
+    }
+
+    function test_DepositCap_ZeroIsUnlimited() public {
+        assertEq(vault.depositCapUsdg(), 0);
+        uint256 shares = _deposit(alice, 10_000e6);
+        assertEq(shares, 10_000e6);
+    }
+
+    function test_DepositCap_BlocksOverCap() public {
+        vault.setDepositCap(50_000e6);
+        _deposit(alice, 10_000e6);
+        usdg.mint(alice, 50_000e6);
+        vm.prank(alice);
+        vm.expectRevert(DeskVault.DepositCap.selector);
+        vault.deposit(40_001e6);
+    }
+
+    function test_DepositCap_AllowsUpToCap() public {
+        vault.setDepositCap(1_000e6);
+        uint256 shares = _deposit(alice, 1_000e6);
+        assertEq(shares, 1_000e6);
+        vm.prank(alice);
+        vm.expectRevert(DeskVault.DepositCap.selector);
+        vault.deposit(1);
     }
 
     function test_ProcessWithdrawals_MultiRequest() public {

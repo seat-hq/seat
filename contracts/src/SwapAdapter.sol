@@ -2,17 +2,22 @@
 pragma solidity 0.8.28;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+
+import {IExactInputRouter} from "./interfaces/IExactInputRouter.sol";
 import {ISwapAdapter} from "./interfaces/ISwapAdapter.sol";
 
 /// @title SwapAdapter
-/// @notice Restricted swap adapter. It never accepts arbitrary calldata or
-///         arbitrary routers. Only an owner-set, verified router and explicitly
-///         allowlisted tokens may be used. In Phase 0 no router is configured,
-///         so `quote` and `execute` revert — there is no live trading path.
+/// @notice Restricted swap adapter. Never accepts arbitrary calldata. Only an
+///         owner-set router implementing IExactInputRouter and allowlisted
+///         tokens may be used. router = 0 (46630: no cited DEX) => revert.
+///         4663 sets ExactInputRouter02 (SwapRouter02 wrapper), not the
+///         Uniswap router directly.
 contract SwapAdapter is ISwapAdapter, Ownable {
-    /// @notice The verified router. address(0) in Phase 0 (disabled).
+    using SafeERC20 for IERC20;
+
     address public router;
-    /// @notice Explicitly allowlisted tokens.
     mapping(address => bool) public allowedToken;
 
     error RouterNotConfigured();
@@ -33,7 +38,6 @@ contract SwapAdapter is ISwapAdapter, Ownable {
         emit TokenAllowed(token, allowed);
     }
 
-    /// @inheritdoc ISwapAdapter
     function validate(SwapParams calldata params)
         public
         view
@@ -45,21 +49,32 @@ contract SwapAdapter is ISwapAdapter, Ownable {
         return (true, "ok");
     }
 
-    /// @inheritdoc ISwapAdapter
     function quote(SwapParams calldata params) external view returns (uint256) {
-        if (router == address(0)) revert RouterNotConfigured();
-        if (!allowedToken[params.tokenIn]) revert TokenNotAllowed(params.tokenIn);
-        if (!allowedToken[params.tokenOut]) revert TokenNotAllowed(params.tokenOut);
-        // No verified pricing path in Phase 0.
+        (bool ok,) = validate(params);
+        if (!ok) {
+            if (router == address(0)) revert RouterNotConfigured();
+            revert TokenNotAllowed(
+                !allowedToken[params.tokenIn] ? params.tokenIn : params.tokenOut
+            );
+        }
+        // No official 46630 quoter. Tests use MockRouter via execute only.
         revert RouterNotConfigured();
     }
 
-    /// @inheritdoc ISwapAdapter
-    function execute(SwapParams calldata params) external returns (uint256) {
-        // Fail closed: Phase 0 never executes real swaps.
+    function execute(SwapParams calldata params) external returns (uint256 amountOut) {
         if (router == address(0)) revert RouterNotConfigured();
         if (!allowedToken[params.tokenIn]) revert TokenNotAllowed(params.tokenIn);
         if (!allowedToken[params.tokenOut]) revert TokenNotAllowed(params.tokenOut);
-        revert RouterNotConfigured();
+
+        IERC20(params.tokenIn).safeTransferFrom(msg.sender, address(this), params.amountIn);
+        IERC20(params.tokenIn).forceApprove(router, params.amountIn);
+        amountOut = IExactInputRouter(router).swapExactIn(
+            params.tokenIn,
+            params.tokenOut,
+            params.amountIn,
+            params.minAmountOut,
+            params.recipient
+        );
+        IERC20(params.tokenIn).forceApprove(router, 0);
     }
 }

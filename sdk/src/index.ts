@@ -10,8 +10,10 @@
 export {
   OFFICIAL_STOCK_TOKENS,
   getOfficialStockToken,
+  getOfficialStockTokenByAddress,
   isTradeEligible,
   listSymbols,
+  listedTokenAddresses,
 } from "./registry.js";
 export type {
   Address,
@@ -42,4 +44,6 @@ export const CHAIN = {
   TESTNET_ID: 46630,
   GAS_ASSET: "ETH",
   ACCOUNTING_ASSET: "USDG",
+  /** Idea.md mainnet desk cap, USDG base units (50_000 × 10^6). */
+  DEPOSIT_CAP_USDG: 50_000n * 1_000_000n,
 } as const;

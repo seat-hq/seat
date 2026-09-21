@@ -4,9 +4,9 @@ import { Providers } from "@/components/Providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SEAT — Testnet desks (Phase 1)",
+  title: "SEAT — USDG copy desks",
   description:
-    "USDG copy desks on Robinhood testnet 46630. Not affiliated with Robinhood. Not investment advice.",
+    "USDG copy desks on Robinhood Chain. Not affiliated with Robinhood. Not investment advice.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

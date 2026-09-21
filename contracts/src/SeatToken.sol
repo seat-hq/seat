@@ -1,21 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
-/// @title SeatToken (STUB — DO NOT DEPLOY IN PHASE 0 OR PHASE 1)
-/// @notice Placeholder for a future governance/utility token. Per protocol
-///         rules there is NO mint function and the token MUST NOT be deployed
-///         until at least one desk has 30 live days. This stub intentionally
-///         has no supply, no mint, and no transfer logic.
-///
-/// @dev Deployment is guarded: the constructor always reverts so the artifact
-///      cannot be put on-chain during Phase 0 or Phase 1.
-contract SeatToken {
-    string public constant name = "SEAT";
-    string public constant symbol = "SEAT";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-    error NotDeployableInPhase0();
+/// @title SeatToken
+/// @notice Fixed-supply $SEAT. 1_000_000_000 tokens, 18 decimals, no mint.
+///         Constructor mints the whole supply to `initialHolder`. Bucket
+///         splits (docs/phase-2.md) are owner transfers after TGE.
+contract SeatToken is ERC20 {
+    uint256 public constant MAX_SUPPLY = 1_000_000_000 ether;
 
-    constructor() {
-        revert NotDeployableInPhase0();
+    constructor(address initialHolder) ERC20("SEAT", "SEAT") {
+        require(initialHolder != address(0), "holder=0");
+        _mint(initialHolder, MAX_SUPPLY);
     }
 }

@@ -2,6 +2,7 @@
 
 import { CHAIN } from "@seat/sdk";
 import { useAccount, useChainId, useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import { getAddresses } from "@/lib/addresses";
 
 function shortAddr(addr: string): string {
   return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
@@ -33,7 +34,11 @@ export function WalletBar() {
     <div className="wallet-bar">
       <span className="mono">{shortAddr(address ?? "")}</span>
       {chainId === CHAIN.MAINNET_ID ? (
-        <span className="warn-text">mainnet 4663 — writes refused</span>
+        getAddresses(CHAIN.MAINNET_ID).deskVault ? (
+          <span className="ok-text">mainnet 4663 — $50k cap</span>
+        ) : (
+          <span className="warn-text">mainnet 4663 — desk not wired</span>
+        )
       ) : chainId !== CHAIN.TESTNET_ID ? (
         <button
           className="btn btn-on"
