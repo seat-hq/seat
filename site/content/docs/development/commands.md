@@ -23,6 +23,12 @@ order: 3
 
 The Makefile prepends `~/.foundry/bin` to `PATH`, so cron/systemd contexts work without an interactive shell profile.
 
+## Vercel (this site)
+
+The public project site is `@seat/site`. The repo `vercel.json` sets `rootDirectory` to `site`. Do **not** point a production project at `app/` — that package is the desk blotter and needs a built `@seat/sdk`.
+
+On the Vercel project: **Settings → Build and Deployment → Root Directory → `site`**, then Redeploy. A site-only commit is skipped while Root Directory is still `app`.
+
 ## Package scripts
 
 | Package | Scripts |
