@@ -12,7 +12,7 @@ export const primaryNav: readonly NavItem[] = [
   { label: "How it works", href: "/#story", hint: "The two piles" },
   { label: "Technology", href: "/#system", hint: "Contracts + keeper" },
   { label: "Economics", href: "/#economics", hint: "NAV, HWM, fees" },
-  { label: "Docs", href: "/docs", hint: "Litepaper + risk" },
+  { label: "Docs", href: "/docs", hint: "Protocol documentation" },
 ];
 
 export const secondaryNav: readonly NavItem[] = [
