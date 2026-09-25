@@ -1,6 +1,6 @@
 .sec {
   background:
-    radial-gradient(60% 40% at 50% 0%, rgba(224, 179, 65, 0.06), transparent 70%),
+    radial-gradient(60% 40% at 50% 0%, rgba(216, 179, 110, 0.06), transparent 70%),
     var(--void);
 }
 

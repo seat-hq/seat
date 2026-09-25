@@ -111,8 +111,8 @@
 
 /* SVG */
 .laneSignal {
-  fill: rgba(224, 179, 65, 0.035);
-  stroke: rgba(224, 179, 65, 0.25);
+  fill: rgba(216, 179, 110, 0.035);
+  stroke: rgba(216, 179, 110, 0.25);
   stroke-dasharray: 4 6;
 }
 

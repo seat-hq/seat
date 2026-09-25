@@ -7,22 +7,27 @@
   --panel-2: #12351f;
   --line: #1c3b2c;
   --line-2: #2a5540;
-  --paper: #f4f1e8;
-  --paper-2: #e9e4d6;
-  --paper-ink: #0b1f16;
-  --paper-dim: #4d5f55;
-  --paper-line: #cfc8b4;
+  --paper: #fcf6ea;
+  --paper-2: #f1e8d4;
+  --paper-ink: #13291f;
+  --paper-dim: #4f5f53;
+  --paper-line: #d9ccb0;
+
+  /* Brand. Forest green, cream and gold from the SEAT mark. */
+  --brand-green: #1c3b2e;
+  --brand-cream: #fcf6ea;
+  --brand-gold: #bb9757;
 
   /* Ink. */
   --ink: #eaf5ee;
   --ink-dim: #9bb8a6;
   --ink-faint: #5f7d6b;
 
-  /* Semantics. Desk things are green. Alex things are amber. Losses are coral. */
+  /* Semantics. Desk things are green. Alex things are gold. Losses are coral. */
   --desk: #35d07f;
   --desk-soft: rgba(53, 208, 127, 0.14);
-  --alex: #e0b341;
-  --alex-soft: rgba(224, 179, 65, 0.14);
+  --alex: #d8b36e;
+  --alex-soft: rgba(216, 179, 110, 0.14);
   --loss: #e3715a;
   --loss-soft: rgba(227, 113, 90, 0.14);
   --focus: #9ff0c4;
@@ -31,6 +36,7 @@
   --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
   --font-ui: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-brand: var(--font-montserrat), var(--font-ui);
 
   --step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
   --step-0: clamp(0.95rem, 0.92rem + 0.15vw, 1.05rem);

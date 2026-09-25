@@ -13,7 +13,7 @@
   pointer-events: none;
   background:
     radial-gradient(60% 50% at 82% 38%, rgba(53, 208, 127, 0.1), transparent 70%),
-    radial-gradient(40% 40% at 14% 40%, rgba(224, 179, 65, 0.07), transparent 70%),
+    radial-gradient(40% 40% at 14% 40%, rgba(216, 179, 110, 0.07), transparent 70%),
     linear-gradient(to bottom, transparent 70%, var(--bg));
 }
 
@@ -155,13 +155,13 @@
 }
 
 .wallet {
-  fill: rgba(224, 179, 65, 0.08);
+  fill: rgba(216, 179, 110, 0.08);
   stroke: var(--alex);
   stroke-width: 1.5;
 }
 
 .walletStrap {
-  fill: rgba(224, 179, 65, 0.22);
+  fill: rgba(216, 179, 110, 0.22);
 }
 
 .key {

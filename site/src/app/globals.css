@@ -126,13 +126,13 @@ p {
   --ink-dim: var(--paper-dim);
   --ink-faint: #7b8a80;
   --line: var(--paper-line);
-  --line-2: #b6ad95;
-  --panel: #ece7d9;
-  --panel-2: #e2dccb;
+  --line-2: #c4b28c;
+  --panel: #f4ecdb;
+  --panel-2: #ebe0c9;
   --desk: #147a46;
   --desk-soft: rgba(20, 122, 70, 0.12);
-  --alex: #8a6412;
-  --alex-soft: rgba(138, 100, 18, 0.12);
+  --alex: #85652c;
+  --alex-soft: rgba(187, 151, 87, 0.16);
   --loss: #b2412b;
   --loss-soft: rgba(178, 65, 43, 0.1);
   --focus: #147a46;

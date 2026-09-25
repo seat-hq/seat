@@ -83,3 +83,94 @@
 .rules a {
   color: var(--desk);
 }
+
+.kit {
+  margin-top: 4rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.kit > p {
+  color: var(--ink-dim);
+  max-width: 60ch;
+}
+
+.kitGrid {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+}
+
+.kitItem {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.kitPreview {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  padding: 1.5rem;
+  background: var(--brand-cream);
+}
+
+.kitItem[data-surface="dark"] .kitPreview {
+  background: var(--brand-green);
+}
+
+.kitPreview img {
+  width: 45%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.kitMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.88rem;
+}
+
+.kitMeta span:first-child {
+  margin-right: auto;
+}
+
+.kitMeta a {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--desk);
+}
+
+.swatches {
+  margin: 0.5rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+
+.swatches dt {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.swatches dt span {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  border: 1px solid var(--line-2);
+}
+
+.swatches dd {
+  margin: 0.2rem 0 0 2rem;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+}

@@ -80,7 +80,54 @@ export default function CommunityPage() {
             </li>
           </ul>
         </section>
+
+        <section className={styles.kit} aria-labelledby="brand-kit">
+          <h2 id="brand-kit" className="h-md">
+            Brand kit
+          </h2>
+          <p>Forest green, cream and gold. Keep the ring around the mark and give it room to breathe.</p>
+          <ul className={styles.kitGrid}>
+            {BRAND_ASSETS.map((a) => (
+              <li key={a.file} className={styles.kitItem} data-surface={a.surface}>
+                <div className={styles.kitPreview}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`/brand/${a.file}`} alt={a.alt} loading="lazy" />
+                </div>
+                <div className={styles.kitMeta}>
+                  <span>{a.label}</span>
+                  <a href={`/brand/${a.file}`} download>
+                    SVG
+                    <span className="sr-only"> — download {a.label}</span>
+                  </a>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <dl className={styles.swatches}>
+            {SWATCHES.map((s) => (
+              <div key={s.hex}>
+                <dt>
+                  <span style={{ background: s.hex }} aria-hidden="true" />
+                  {s.name}
+                </dt>
+                <dd className="mono">{s.hex}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
       </div>
     </div>
   );
 }
+
+const BRAND_ASSETS: readonly { file: string; label: string; alt: string; surface: "light" | "dark" }[] = [
+  { file: "seat-mark-light.svg", label: "Mark · light", alt: "SEAT mark in green on cream", surface: "light" },
+  { file: "seat-mark-dark.svg", label: "Mark · dark", alt: "SEAT mark in cream on green", surface: "dark" },
+  { file: "seat-badge.svg", label: "Badge", alt: "SEAT badge: outlined mark on a green disc", surface: "light" },
+];
+
+const SWATCHES = [
+  { name: "Forest", hex: "#1c3b2e" },
+  { name: "Cream", hex: "#fcf6ea" },
+  { name: "Gold", hex: "#bb9757" },
+] as const;

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Fraunces, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import { Fraunces, Inter_Tight, JetBrains_Mono, Montserrat } from "next/font/google";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { MotionBoot, motionHeadScript } from "@/motion/MotionBoot";
@@ -18,6 +18,8 @@ const fraunces = Fraunces({
 const inter = Inter_Tight({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap" });
+
+const brand = Montserrat({ subsets: ["latin"], weight: ["600"], variable: "--font-montserrat", display: "swap" });
 
 const description =
   "SEAT is a copy desk, not a sniper bot. Deposit USDG into a separate desk vault, receive seat shares that claim the desk's NAV, and let a risk engine decide which of a leader's Stock Token trades get copied — smaller, filtered and capped.";
@@ -67,6 +69,7 @@ const jsonLd = {
   name: "SEAT",
   url: siteUrl,
   description,
+  logo: `${siteUrl}/brand/seat-mark-light.svg`,
   sameAs: [links.github.href, links.x.href, links.community.href].filter(Boolean),
 };
 
@@ -74,7 +77,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${inter.variable} ${mono.variable}`}
+      className={`${fraunces.variable} ${inter.variable} ${mono.variable} ${brand.variable}`}
       suppressHydrationWarning
     >
       <head>

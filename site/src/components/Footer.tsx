@@ -12,7 +12,7 @@ export function Footer() {
       <div className="wrap">
         <div className={styles.top}>
           <div className={styles.brandCol}>
-            <Wordmark size={28} />
+            <Wordmark size={40} />
             <p className={styles.tag}>Copy desk, not sniper bot.</p>
             <p className={styles.small}>
               USDG desks that copy opted-in Stock Token traders on Robinhood Chain. Shares represent a claim on desk NAV.
