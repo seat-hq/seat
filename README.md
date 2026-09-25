@@ -5,6 +5,9 @@ USDG desks that copy opted-in Stock Token traders on Robinhood Chain.
 Not affiliated with Robinhood Markets. Stock Tokens may be subject to
 jurisdictional restrictions and are not the same as directly owning shares.
 
+Developer docs: `make site-dev` and open `/docs`. Canonical runbooks stay in
+[`docs/`](docs/).
+
 ## What this repo is
 
 | Path | Job |
@@ -13,7 +16,8 @@ jurisdictional restrictions and are not the same as directly owning shares.
 | `keeper/` | Watches leader fills, submits vault copies |
 | `app/` | Deposit / seats / fill tape |
 | `sdk/` | Official token registry + NAV math |
-| `docs/` | Litepaper, Phase 1/2 runbooks, and risk |
+| `site/` | Project site and developer docs |
+| `docs/` | Litepaper, Phase 1/2 runbooks, and risk (also rendered at `/docs/runbooks`) |
 
 ## Chain
 
@@ -59,6 +63,12 @@ that chain has a real vault):
 
 ```bash
 make app-dev
+```
+
+Docs site (port 3100):
+
+```bash
+make site-dev
 ```
 
 Keeper on testnet config (paper executor unless live guards pass — they do
