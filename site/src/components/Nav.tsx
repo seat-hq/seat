@@ -93,43 +93,45 @@ export function Nav() {
   }, [open]);
 
   return (
-    <header className={`${styles.bar} ${scrolled ? styles.scrolled : ""}`}>
-      <div className={styles.progress} aria-hidden="true" />
-      <div className={styles.inner}>
-        <Link href="/" className={styles.brand} aria-label="SEAT home">
-          <Wordmark />
-        </Link>
-        <nav aria-label="Primary" className={styles.primary}>
-          {primaryNav.map((item) => (
-            <ItemLink key={item.label} item={item} className={styles.link} />
-          ))}
-        </nav>
-        <div className={styles.right}>
-          {links.product.href ? (
-            <a className={styles.product} href={links.product.href} target="_blank" rel="noopener noreferrer">
-              Open product <span aria-hidden="true">↗</span>
-            </a>
-          ) : (
-            <span className={styles.product} aria-disabled="true" title="Product URL not published yet">
-              Product <span className="tbd">TBD</span>
-            </span>
-          )}
-          <button
-            ref={toggleRef}
-            type="button"
-            className={styles.toggle}
-            aria-expanded={open}
-            aria-controls="site-menu"
-            onClick={() => setOpen((v) => !v)}
-          >
-            <span className={styles.toggleLabel}>{open ? "Close" : "Menu"}</span>
-            <span className={styles.burger} data-open={open} aria-hidden="true">
-              <i />
-              <i />
-            </span>
-          </button>
+    <>
+      <header className={`${styles.bar} ${scrolled ? styles.scrolled : ""}`} data-open={open}>
+        <div className={styles.progress} aria-hidden="true" />
+        <div className={styles.inner}>
+          <Link href="/" className={styles.brand} aria-label="SEAT home">
+            <Wordmark />
+          </Link>
+          <nav aria-label="Primary" className={styles.primary}>
+            {primaryNav.map((item) => (
+              <ItemLink key={item.label} item={item} className={styles.link} />
+            ))}
+          </nav>
+          <div className={styles.right}>
+            {links.product.href ? (
+              <a className={styles.product} href={links.product.href} target="_blank" rel="noopener noreferrer">
+                Open product <span aria-hidden="true">↗</span>
+              </a>
+            ) : (
+              <span className={styles.product} aria-disabled="true" title="Product URL not published yet">
+                Product <span className="tbd">TBD</span>
+              </span>
+            )}
+            <button
+              ref={toggleRef}
+              type="button"
+              className={styles.toggle}
+              aria-expanded={open}
+              aria-controls="site-menu"
+              onClick={() => setOpen((v) => !v)}
+            >
+              <span className={styles.toggleLabel}>{open ? "Close" : "Menu"}</span>
+              <span className={styles.burger} data-open={open} aria-hidden="true">
+                <i />
+                <i />
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
       <div
         id="site-menu"
@@ -170,6 +172,6 @@ export function Nav() {
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }

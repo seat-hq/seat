@@ -16,6 +16,13 @@
   border-bottom-color: var(--line);
 }
 
+.bar[data-open="true"] {
+  background: var(--void);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
 /* Native scroll-driven page progress. Hidden where unsupported. */
 .progress {
   position: absolute;
@@ -208,7 +215,7 @@
 .menu {
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 49;
   background: var(--void);
   background-image: radial-gradient(120% 80% at 90% 0%, rgba(53, 208, 127, 0.1), transparent 60%);
   overflow-y: auto;
