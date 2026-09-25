@@ -12,6 +12,14 @@ html {
   background: var(--bg);
 }
 
+html:has(body.has-token-bar) {
+  scroll-padding-top: calc(var(--nav-h) + var(--token-bar-h) + 12px);
+}
+
+body.has-token-bar #main > main {
+  padding-top: var(--token-bar-h);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;

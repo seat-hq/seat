@@ -1,4 +1,6 @@
 :root {
+  --token-bar-h: 3.25rem;
+
   /* Surfaces: a deep green ledger, with cream paper for quiet sections. */
   --void: #050f0a;
   --bg: #07140e;

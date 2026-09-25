@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Fraunces, Inter_Tight, JetBrains_Mono, Montserrat } from "next/font/google";
 import { Nav } from "@/components/Nav";
+import { TokenCaBar } from "@/components/TokenCaBar";
 import { Footer } from "@/components/Footer";
+import { getSeatTokenAddress } from "@/lib/addresses";
 import { MotionBoot, motionHeadScript } from "@/motion/MotionBoot";
 import { siteUrl, links } from "@/lib/links";
 import "./globals.css";
@@ -74,6 +76,8 @@ const jsonLd = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  const seatTokenAddress = getSeatTokenAddress();
+
   return (
     <html
       lang="en"
@@ -84,11 +88,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: motionHeadScript }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
-      <body>
+      <body className={seatTokenAddress ? "has-token-bar" : undefined}>
         <a className="skip-link" href="#main">
           Skip to content
         </a>
         <Nav />
+        {seatTokenAddress ? <TokenCaBar address={seatTokenAddress} /> : null}
         <div id="main">
           <main>{children}</main>
           <Footer />
