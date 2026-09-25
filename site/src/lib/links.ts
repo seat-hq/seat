@@ -1,8 +1,8 @@
 /**
  * Every external or cross-site URL used by the site.
  *
- * `href: null` means the destination does not exist yet (TBD). The UI renders
- * those as disabled "coming soon" states instead of guessing a URL.
+ * `href: null` means the destination does not exist yet. The UI renders
+ * those as disabled "Launching soon" states instead of guessing a URL.
  * Set a value through the matching NEXT_PUBLIC_* env var or edit it here.
  */
 export interface SiteLink {
@@ -49,6 +49,9 @@ export const links = {
 } as const satisfies Record<string, SiteLink>;
 
 export type LinkKey = keyof typeof links;
+
+/** Shown next to destinations that are not published yet. */
+export const unpublishedLabel = "Launching soon";
 
 export const siteUrl =
   env(process.env.NEXT_PUBLIC_SEAT_SITE_URL) ?? "http://localhost:3100";

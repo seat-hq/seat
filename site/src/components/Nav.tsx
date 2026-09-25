@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { primaryNav, secondaryNav, type NavItem } from "@/lib/nav";
-import { links } from "@/lib/links";
+import { links, unpublishedLabel } from "@/lib/links";
 import { Wordmark } from "./Wordmark";
 import styles from "./Nav.module.css";
 
@@ -18,7 +18,7 @@ function ItemLink({ item, className, onNavigate, i }: {
   if (!item.href) {
     return (
       <span className={className} aria-disabled="true" style={style}>
-        {item.label} <span className="tbd">TBD</span>
+        {item.label} <span className="tbd">{unpublishedLabel}</span>
       </span>
     );
   }
@@ -112,7 +112,7 @@ export function Nav() {
               </a>
             ) : (
               <span className={styles.product} aria-disabled="true" title="Product URL not published yet">
-                Product <span className="tbd">TBD</span>
+                Product <span className="tbd">{unpublishedLabel}</span>
               </span>
             )}
             <button

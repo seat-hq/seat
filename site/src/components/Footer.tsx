@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { links } from "@/lib/links";
+import { links, unpublishedLabel } from "@/lib/links";
 import { primaryNav } from "@/lib/nav";
 import { Wordmark } from "./Wordmark";
 import styles from "./Footer.module.css";
@@ -42,7 +42,7 @@ export function Footer() {
                       </a>
                     ) : (
                       <span className={styles.off}>
-                        {l.label} <span className="tbd">TBD</span>
+                        {l.label} <span className="tbd">{unpublishedLabel}</span>
                       </span>
                     )}
                   </li>

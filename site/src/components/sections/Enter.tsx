@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LinkButton } from "@/components/LinkButton";
-import { links, type LinkKey } from "@/lib/links";
+import { links, unpublishedLabel, type LinkKey } from "@/lib/links";
 import { Icon, type IconName } from "@/components/Icons";
 import styles from "./Enter.module.css";
 
@@ -53,7 +53,7 @@ export function Enter() {
                     <span className="mono">{kicker}</span>
                   </span>
                   <span className={styles.cardName}>
-                    {l.label} {l.href ? <span aria-hidden="true">{l.external ? "↗" : "→"}</span> : <span className="tbd">TBD</span>}
+                    {l.label} {l.href ? <span aria-hidden="true">{l.external ? "↗" : "→"}</span> : <span className="tbd">{unpublishedLabel}</span>}
                   </span>
                   <span className={styles.cardDesc}>{l.description}</span>
                 </>
