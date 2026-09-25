@@ -30,14 +30,8 @@ export const links = {
   },
   x: {
     label: "X",
-    href: env(process.env.NEXT_PUBLIC_SEAT_X_URL),
+    href: env(process.env.NEXT_PUBLIC_SEAT_X_URL) ?? "https://x.com/seatdesks",
     description: "Announcements and release notes.",
-    external: true,
-  },
-  community: {
-    label: "Community",
-    href: env(process.env.NEXT_PUBLIC_SEAT_COMMUNITY_URL),
-    description: "Chat with builders, leaders and depositors.",
     external: true,
   },
   discussions: {
@@ -50,12 +44,6 @@ export const links = {
     label: "Docs",
     href: "/docs",
     description: "Litepaper, risk, allowlist and phase runbooks.",
-    external: false,
-  },
-  articles: {
-    label: "Articles",
-    href: "/articles",
-    description: "Research and engineering notes.",
     external: false,
   },
 } as const satisfies Record<string, SiteLink>;

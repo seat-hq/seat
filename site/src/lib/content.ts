@@ -19,15 +19,7 @@ export interface Doc {
   readonly sourcePath: string;
 }
 
-export interface Article extends Omit<Doc, "group" | "sourcePath"> {
-  readonly category: string;
-  readonly date: string;
-  readonly author: string;
-  readonly tags: readonly string[];
-}
-
 const DOCS_DIR = path.join(process.cwd(), "..", "docs");
-const ARTICLES_DIR = path.join(process.cwd(), "content", "articles");
 
 /** Public docs, in reading order. Internal notes and deploy-day runbooks are excluded. */
 const CURATED: readonly { slug: string; group: Doc["group"]; description: string }[] = [
@@ -118,42 +110,4 @@ export function resolveDocHref(href: string): string | null {
   }
   const repoPath = file.startsWith("../") ? file.slice(3) : `docs/${file}`;
   return `${links.github.href}/blob/main/${repoPath}${hash ? `#${hash}` : ""}`;
-}
-
-function parseFrontmatter(raw: string): { data: Record<string, string>; body: string } {
-  const m = /^---\n([\s\S]*?)\n---\n/.exec(raw);
-  if (!m || !m[1]) return { data: {}, body: raw };
-  const data: Record<string, string> = {};
-  for (const line of m[1].split("\n")) {
-    const i = line.indexOf(":");
-    if (i > 0) data[line.slice(0, i).trim()] = line.slice(i + 1).trim().replace(/^"|"$/g, "");
-  }
-  return { data, body: raw.slice(m[0].length) };
-}
-
-export function getArticles(): Article[] {
-  if (!fs.existsSync(ARTICLES_DIR)) return [];
-  return fs
-    .readdirSync(ARTICLES_DIR)
-    .filter((f) => f.endsWith(".md"))
-    .map((f) => {
-      const { data, body } = parseFrontmatter(fs.readFileSync(path.join(ARTICLES_DIR, f), "utf8"));
-      return {
-        slug: f.replace(/\.md$/, ""),
-        title: data.title ?? "Untitled",
-        description: data.description ?? "",
-        category: data.category ?? "Notes",
-        date: data.date ?? "",
-        author: data.author ?? "SEAT contributors",
-        tags: (data.tags ?? "").split(",").map((t) => t.trim()).filter(Boolean),
-        body,
-        headings: extractHeadings(body),
-        minutes: minutesOf(body),
-      };
-    })
-    .sort((a, b) => (Number(a.date < b.date) - Number(a.date > b.date)) || a.title.localeCompare(b.title));
-}
-
-export function getArticle(slug: string): Article | undefined {
-  return getArticles().find((a) => a.slug === slug);
 }

@@ -13,13 +13,11 @@ export const primaryNav: readonly NavItem[] = [
   { label: "Technology", href: "/#system", hint: "Contracts + keeper" },
   { label: "Economics", href: "/#economics", hint: "NAV, HWM, fees" },
   { label: "Docs", href: "/docs", hint: "Litepaper + risk" },
-  { label: "Articles", href: "/articles", hint: "Research notes" },
 ];
 
 export const secondaryNav: readonly NavItem[] = [
   { label: "Product", href: links.product.href, external: true },
   { label: "X", href: links.x.href, external: true },
-  { label: "Community", href: links.community.href, external: true },
   { label: "GitHub", href: links.github.href, external: true },
   { label: "Roadmap", href: "/#status" },
 ];

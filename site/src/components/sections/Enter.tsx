@@ -7,10 +7,8 @@ import styles from "./Enter.module.css";
 const eco: readonly { key: LinkKey; icon: IconName; kicker: string }[] = [
   { key: "docs", icon: "code", kicker: "Read" },
   { key: "product", icon: "front", kicker: "Use" },
-  { key: "articles", icon: "signal", kicker: "Research" },
   { key: "github", icon: "code", kicker: "Build" },
   { key: "x", icon: "eye", kicker: "Follow" },
-  { key: "community", icon: "keeper", kicker: "Talk" },
   { key: "discussions", icon: "gate", kicker: "Discuss" },
 ];
 
@@ -36,9 +34,6 @@ export function Enter() {
               Enter the desk
             </LinkButton>
             <LinkButton to="docs">Read the docs</LinkButton>
-            <LinkButton to="articles" magnetic={false}>
-              Read articles
-            </LinkButton>
           </div>
         </div>
       </section>
@@ -82,18 +77,6 @@ export function Enter() {
                 </li>
               );
             })}
-            <li>
-              <Link className={styles.card} href="/community">
-                <span className={styles.cardTop}>
-                  <Icon name="shares" size={22} />
-                  <span className="mono">Join</span>
-                </span>
-                <span className={styles.cardName}>
-                  Community hub <span aria-hidden="true">→</span>
-                </span>
-                <span className={styles.cardDesc}>Announcements, chat and technical discussion in one place.</span>
-              </Link>
-            </li>
           </ul>
         </div>
       </section>

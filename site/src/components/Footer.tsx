@@ -4,7 +4,7 @@ import { primaryNav } from "@/lib/nav";
 import { Wordmark } from "./Wordmark";
 import styles from "./Footer.module.css";
 
-const ext = [links.product, links.github, links.x, links.community, links.discussions];
+const ext = [links.product, links.github, links.x, links.discussions];
 
 export function Footer() {
   return (
@@ -29,9 +29,6 @@ export function Footer() {
                     </li>
                   ) : null,
                 )}
-                <li>
-                  <Link href="/community">Community</Link>
-                </li>
               </ul>
             </div>
             <div>

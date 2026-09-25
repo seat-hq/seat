@@ -70,7 +70,7 @@ const jsonLd = {
   url: siteUrl,
   description,
   logo: `${siteUrl}/brand/seat-mark-light.svg`,
-  sameAs: [links.github.href, links.x.href, links.community.href].filter(Boolean),
+  sameAs: [links.github.href, links.x.href].filter(Boolean),
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
