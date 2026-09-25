@@ -1,0 +1,423 @@
+@import "../styles/tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--nav-h) + 12px);
+  background: var(--bg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Grain: one fixed layer, no animation. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--desk);
+  color: var(--paper-ink);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0;
+}
+
+/* The page recedes while the fullscreen menu is open. */
+#main {
+  transition:
+    transform var(--dur-3) var(--ease-out),
+    filter var(--dur-3) var(--ease-out);
+  transform-origin: 50% 0;
+}
+
+.menu-open {
+  overflow: hidden;
+}
+
+.menu-open #main {
+  transform: scale(0.97);
+  filter: brightness(0.5);
+}
+
+/* ---------- Layout primitives ---------- */
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.sec {
+  position: relative;
+  padding-block: clamp(5rem, 3rem + 9vw, 11rem);
+}
+
+.sec--tight {
+  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem);
+}
+
+.sec--paper {
+  background: var(--paper);
+  color: var(--paper-ink);
+  --ink: var(--paper-ink);
+  --ink-dim: var(--paper-dim);
+  --ink-faint: #7b8a80;
+  --line: var(--paper-line);
+  --line-2: #b6ad95;
+  --panel: #ece7d9;
+  --panel-2: #e2dccb;
+  --desk: #147a46;
+  --desk-soft: rgba(20, 122, 70, 0.12);
+  --alex: #8a6412;
+  --alex-soft: rgba(138, 100, 18, 0.12);
+  --loss: #b2412b;
+  --loss-soft: rgba(178, 65, 43, 0.1);
+  --focus: #147a46;
+}
+
+.sec--void {
+  background: var(--void);
+}
+
+.sec--grid {
+  background-image:
+    linear-gradient(to right, rgba(155, 184, 166, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(155, 184, 166, 0.06) 1px, transparent 1px);
+  background-size: 72px 72px;
+  background-position: center top;
+}
+
+.sec--paper.sec--grid {
+  background-image:
+    linear-gradient(to right, rgba(11, 31, 22, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 31, 22, 0.06) 1px, transparent 1px);
+}
+
+/* ---------- Type primitives ---------- */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 1.8em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.eyebrow b {
+  color: var(--desk);
+  font-weight: 500;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-variation-settings: "SOFT" 30;
+  letter-spacing: -0.02em;
+  word-spacing: 0.03em;
+  line-height: 0.98;
+}
+
+.display em {
+  font-style: italic;
+  color: var(--desk);
+}
+
+.h-xl {
+  font-size: var(--step-5);
+}
+
+.h-lg {
+  font-size: var(--step-4);
+}
+
+.h-md {
+  font-size: var(--step-3);
+}
+
+.lede {
+  font-size: var(--step-1);
+  color: var(--ink-dim);
+  max-width: 44ch;
+  line-height: 1.5;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+.dim {
+  color: var(--ink-dim);
+}
+
+.c-desk {
+  color: var(--desk);
+}
+
+.c-alex {
+  color: var(--alex);
+}
+
+.c-loss {
+  color: var(--loss);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 200;
+  padding: 10px 14px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: var(--radius-sm);
+  transform: translateY(-160%);
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Example label: the honesty stamp used on every illustrative number. */
+.example-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.35em 0.7em;
+  border: 1px dashed var(--alex);
+  border-radius: 999px;
+  color: var(--alex);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  max-width: 100%;
+}
+
+.example-tag::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  --btn-line: var(--line-2);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.9em 1.3em;
+  border: 1px solid var(--btn-line);
+  border-radius: 999px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    transform var(--dur-2) var(--ease-out);
+  will-change: transform;
+}
+
+.btn .arrow {
+  display: inline-block;
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+.btn:hover .arrow,
+.btn:focus-visible .arrow {
+  transform: translateX(4px);
+}
+
+.btn[data-dir="down"]:hover .arrow,
+.btn[data-dir="down"]:focus-visible .arrow {
+  transform: translateY(3px);
+}
+
+.btn[data-dir="up-right"]:hover .arrow,
+.btn[data-dir="up-right"]:focus-visible .arrow {
+  transform: translate(3px, -3px);
+}
+
+.btn--primary {
+  --btn-bg: var(--desk);
+  --btn-fg: #04120b;
+  --btn-line: var(--desk);
+}
+
+.btn--primary:hover {
+  --btn-bg: #5de39b;
+  --btn-line: #5de39b;
+}
+
+.btn--ghost:hover {
+  --btn-line: var(--ink);
+}
+
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn[aria-disabled="true"] .arrow {
+  transform: none !important;
+}
+
+.tbd {
+  font-family: var(--font-mono);
+  font-size: 0.72em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.15em 0.5em;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  opacity: 0.8;
+}
+
+/* ---------- Chips ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.3em 0.7em;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+
+.chip--desk {
+  color: var(--desk);
+  border-color: color-mix(in srgb, var(--desk) 60%, transparent);
+  background: var(--desk-soft);
+}
+
+.chip--alex {
+  color: var(--alex);
+  border-color: color-mix(in srgb, var(--alex) 60%, transparent);
+  background: var(--alex-soft);
+}
+
+.chip--loss {
+  color: var(--loss);
+  border-color: color-mix(in srgb, var(--loss) 60%, transparent);
+  background: var(--loss-soft);
+}
+
+/* ---------- Reveal (progressive enhancement) ---------- */
+
+/* Content is visible by default. JS adds .js-motion to <html> when motion is allowed. */
+.js-motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.js-motion [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-3) var(--ease-out),
+    transform var(--dur-3) var(--ease-out);
+  transition-delay: calc(var(--reveal-i, 0) * 70ms);
+}

@@ -1,0 +1,132 @@
+.sec {
+  background:
+    radial-gradient(50% 40% at 0% 20%, rgba(224, 179, 65, 0.06), transparent 70%),
+    radial-gradient(50% 40% at 100% 40%, rgba(53, 208, 127, 0.06), transparent 70%),
+    var(--bg);
+}
+
+.head {
+  display: grid;
+  gap: 1.4rem;
+  max-width: 900px;
+}
+
+.actors {
+  list-style: none;
+  margin: 3.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.actor {
+  --tone: var(--ink-dim);
+  padding: 1.4rem;
+  border: 1px solid color-mix(in srgb, var(--tone) 40%, transparent);
+  border-top: 3px solid var(--tone);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--tone) 4%, transparent);
+  display: grid;
+  gap: 1.1rem;
+  align-content: start;
+  transition: transform var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
+}
+
+.actor:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--tone) 70%, transparent);
+}
+
+.actor[data-tone="alex"] {
+  --tone: var(--alex);
+}
+
+.actor[data-tone="desk"] {
+  --tone: var(--desk);
+}
+
+.actor[data-tone="you"] {
+  --tone: var(--paper);
+}
+
+.actor[data-tone="owner"] {
+  --tone: var(--loss);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  letter-spacing: -0.02em;
+}
+
+.role {
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.group ul {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.group li {
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.group li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  color: var(--tone);
+  font-family: var(--font-mono);
+}
+
+.group[data-kind="no"] li {
+  color: var(--ink-dim);
+}
+
+.group[data-kind="no"] li::before {
+  content: "×";
+  color: var(--loss);
+}
+
+.groupLabel {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.notYet {
+  margin-top: 2rem;
+  padding: 1.4rem 1.6rem;
+  border: 1px dashed var(--loss);
+  border-radius: var(--radius);
+  background: var(--loss-soft);
+}
+
+.notYetTitle {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--loss);
+  font-weight: 500;
+}
+
+.notYet ul {
+  margin: 0.8rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  column-gap: 2rem;
+}

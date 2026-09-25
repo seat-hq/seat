@@ -1,0 +1,145 @@
+.title {
+  margin-top: 1.5rem;
+  max-width: 20ch;
+}
+
+.lede {
+  margin-top: 1.4rem;
+  color: var(--paper-dim);
+  max-width: 56ch;
+  font-size: var(--step-1);
+}
+
+.pipes {
+  margin-top: 4rem;
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 860px) {
+  .pipes {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+}
+
+.pipe {
+  margin: 0;
+}
+
+.pipe figcaption {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  margin-bottom: 1rem;
+}
+
+.pipe ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 22px;
+  position: relative;
+}
+
+.pipe ol::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  top: 20px;
+  bottom: 20px;
+  width: 1px;
+  background: var(--paper-ink);
+  opacity: 0.35;
+}
+
+.pipe li {
+  position: relative;
+  padding: 0.75rem 1rem 0.75rem 3.2rem;
+  border: 1px solid var(--paper-line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-weight: 500;
+}
+
+.pipe li::before {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin-top: -5.5px;
+  border-radius: 50%;
+  background: var(--paper-ink);
+}
+
+.pipe[data-kind="wallet"] li {
+  color: var(--paper-dim);
+}
+
+.pipe li[data-side="alex"] {
+  border-color: var(--alex);
+}
+
+.pipe li[data-side="alex"]::before {
+  background: var(--alex);
+}
+
+.pipe li[data-side="engine"] {
+  border-style: dashed;
+  border-color: var(--paper-dim);
+}
+
+.pipe li[data-side="desk"] {
+  border-color: var(--desk);
+  background: color-mix(in srgb, var(--desk) 7%, var(--paper));
+}
+
+.pipe li[data-side="desk"]::before {
+  background: var(--desk);
+}
+
+.tableWrap {
+  margin-top: 4.5rem;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 1rem 1rem 1rem 0;
+  border-bottom: 1px solid var(--paper-line);
+  vertical-align: top;
+}
+
+.table thead th {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  font-weight: 400;
+}
+
+.table tbody th {
+  font-weight: 500;
+  width: 22%;
+}
+
+.table td:nth-child(2) {
+  color: var(--paper-dim);
+}
+
+.table td:nth-child(3) {
+  color: var(--paper-ink);
+}

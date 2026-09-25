@@ -1,0 +1,344 @@
+.bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  height: var(--nav-h);
+  transition:
+    background var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out);
+  border-bottom: 1px solid transparent;
+}
+
+.scrolled {
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-bottom-color: var(--line);
+}
+
+/* Native scroll-driven page progress. Hidden where unsupported. */
+.progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 100%;
+  background: var(--desk);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  opacity: 0;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .progress {
+      opacity: 0.8;
+      animation: grow linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+@keyframes grow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.inner {
+  height: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.brand {
+  text-decoration: none;
+  color: var(--ink);
+  position: relative;
+  z-index: 2;
+}
+
+.primary {
+  display: none;
+  gap: 1.6rem;
+  margin-left: auto;
+}
+
+@media (min-width: 1080px) {
+  .primary {
+    display: flex;
+  }
+}
+
+.link {
+  position: relative;
+  color: var(--ink-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 6px 0;
+  transition: color var(--dur-2) var(--ease-out);
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--desk);
+  transform: scaleX(0);
+  transform-origin: 100% 50%;
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--ink);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: 0 50%;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-left: auto;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 1080px) {
+  .right {
+    margin-left: 0;
+  }
+}
+
+.product {
+  display: none;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.85rem;
+  padding: 0.5em 0.95em;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color var(--dur-2) var(--ease-out);
+}
+
+.product:hover {
+  border-color: var(--desk);
+}
+
+.product[aria-disabled="true"] {
+  color: var(--ink-dim);
+}
+
+@media (min-width: 640px) {
+  .product {
+    display: inline-flex;
+  }
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.5em 0.9em;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.toggle:hover {
+  border-color: var(--ink);
+}
+
+.toggleLabel {
+  min-width: 3.2em;
+  text-align: left;
+}
+
+.burger {
+  position: relative;
+  width: 16px;
+  height: 10px;
+}
+
+.burger i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform var(--dur-2) var(--ease-out), top var(--dur-2) var(--ease-out);
+}
+
+.burger i:first-child {
+  top: 1px;
+}
+
+.burger i:last-child {
+  top: 7px;
+}
+
+.burger[data-open="true"] i:first-child {
+  top: 4px;
+  transform: rotate(45deg);
+}
+
+.burger[data-open="true"] i:last-child {
+  top: 4px;
+  transform: rotate(-45deg);
+}
+
+/* ---------- Fullscreen menu ---------- */
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: var(--void);
+  background-image: radial-gradient(120% 80% at 90% 0%, rgba(53, 208, 127, 0.1), transparent 60%);
+  overflow-y: auto;
+  padding-top: calc(var(--nav-h) + 3vh);
+}
+
+.menu[data-open="true"] {
+  animation: menuIn var(--dur-3) var(--ease-out) both;
+}
+
+@keyframes menuIn {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.menuInner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2rem var(--gutter) 4rem;
+  display: grid;
+  gap: 3rem;
+}
+
+@media (min-width: 900px) {
+  .menuInner {
+    grid-template-columns: 1.6fr 1fr;
+    align-items: end;
+    min-height: calc(100vh - var(--nav-h) - 6vh);
+  }
+}
+
+.menuPrimary ol {
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  counter-reset: m;
+}
+
+.menuPrimary li {
+  counter-increment: m;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  border-top: 1px solid var(--line);
+  padding: 0.35rem 0;
+}
+
+.menuPrimary li::before {
+  content: "0" counter(m);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  width: 2.2em;
+}
+
+.menuLink {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.4rem + 3vw, 4.2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  text-decoration: none;
+  color: var(--ink);
+  transition: color var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out);
+}
+
+.menuLink:hover,
+.menuLink:focus-visible {
+  color: var(--desk);
+  transform: translateX(8px);
+}
+
+.menuHint {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .menuHint {
+    display: inline;
+  }
+}
+
+.menuSide ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.2rem 0 2rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sideLink {
+  font-size: 1.15rem;
+  color: var(--ink-dim);
+  text-decoration: none;
+}
+
+.sideLink:hover,
+.sideLink:focus-visible {
+  color: var(--ink);
+}
+
+.menuNote {
+  max-width: 34ch;
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .menu[data-open="true"] .menuLink,
+  .menu[data-open="true"] .menuHint,
+  .menu[data-open="true"] .sideLink {
+    animation: itemIn 700ms var(--ease-out) backwards;
+    animation-delay: calc(120ms + var(--i, 0) * 45ms);
+  }
+}
+
+@keyframes itemIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

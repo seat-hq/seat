@@ -1,0 +1,38 @@
+.sec {
+  background: linear-gradient(to bottom, var(--bg), var(--void) 60%);
+}
+
+.first {
+  margin-top: 2rem;
+  font-size: var(--step-3);
+  max-width: 22ch;
+  color: var(--ink-dim);
+}
+
+.sub {
+  margin-top: 1.2rem;
+  color: var(--ink-faint);
+  max-width: 48ch;
+}
+
+.turn {
+  margin-top: clamp(4rem, 2rem + 10vw, 12rem);
+  font-size: var(--step-4);
+  max-width: 18ch;
+}
+
+.punch {
+  margin-top: 1.5rem;
+  font-size: var(--step-6);
+  line-height: 0.92;
+  max-width: 12ch;
+  margin-left: auto;
+  text-align: right;
+}
+
+@media (max-width: 720px) {
+  .punch {
+    text-align: left;
+    margin-left: 0;
+  }
+}

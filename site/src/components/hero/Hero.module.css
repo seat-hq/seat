@@ -1,0 +1,269 @@
+.hero {
+  position: relative;
+  min-height: 100svh;
+  padding: calc(var(--nav-h) + 1rem) 0 2rem;
+  background-color: var(--bg);
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 82% 38%, rgba(53, 208, 127, 0.1), transparent 70%),
+    radial-gradient(40% 40% at 14% 40%, rgba(224, 179, 65, 0.07), transparent 70%),
+    linear-gradient(to bottom, transparent 70%, var(--bg));
+}
+
+.inner {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+}
+
+.eyebrow {
+  margin-top: 0.5rem;
+}
+
+.stage {
+  position: relative;
+  margin-inline: calc(var(--gutter) * -0.5);
+}
+
+.scene {
+  width: 100%;
+  height: auto;
+  max-height: 44vh;
+  overflow: visible;
+}
+
+@media (max-width: 720px) {
+  .scene {
+    max-height: 62svh;
+    max-width: 340px;
+    margin-inline: auto;
+  }
+}
+
+.copy {
+  display: grid;
+  gap: 2rem;
+  align-items: end;
+}
+
+@media (min-width: 980px) {
+  .copy {
+    grid-template-columns: 1.35fr 1fr;
+  }
+}
+
+.title {
+  font-size: clamp(3rem, 1.4rem + 6vw, 8.2rem);
+}
+
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.line > span {
+  display: inline-block;
+}
+
+:global(.js-motion) .line > span {
+  animation: rise 1.2s var(--ease-out) both;
+  animation-delay: calc(0.5s + var(--d, 0) * 0.14s);
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.side {
+  display: grid;
+  gap: 1.6rem;
+}
+
+.lede {
+  font-size: var(--step-1);
+  color: var(--ink-dim);
+  max-width: 42ch;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.facts {
+  margin: 1.5rem 0 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 860px) {
+  .facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.facts dt {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.facts dd {
+  margin: 0.2rem 0 0;
+  font-size: 0.92rem;
+}
+
+/* ---------- SVG scene ---------- */
+
+.divider {
+  stroke: var(--line-2);
+  stroke-width: 1.5;
+}
+
+.sideLabel {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  fill: var(--ink-faint);
+}
+
+.rail {
+  stroke: var(--ink-faint);
+  stroke-width: 1.5;
+  opacity: 0.6;
+}
+
+.wallet {
+  fill: rgba(224, 179, 65, 0.08);
+  stroke: var(--alex);
+  stroke-width: 1.5;
+}
+
+.walletStrap {
+  fill: rgba(224, 179, 65, 0.22);
+}
+
+.key {
+  fill: none;
+  stroke: var(--alex);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.nodeTitle {
+  font-family: var(--font-mono);
+  font-size: 17px;
+  letter-spacing: 0.1em;
+  fill: var(--ink);
+  font-weight: 500;
+}
+
+.nodeSub {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  fill: var(--ink-dim);
+}
+
+.gate {
+  fill: var(--line-2);
+}
+
+.gateLabel {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  fill: var(--ink-dim);
+}
+
+.vault {
+  fill: rgba(53, 208, 127, 0.06);
+  stroke: var(--desk);
+  stroke-width: 1.5;
+}
+
+.cash {
+  fill: var(--paper);
+  opacity: 0.92;
+}
+
+.nvda {
+  fill: var(--desk);
+}
+
+.blockLabel {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: var(--paper-ink);
+  letter-spacing: 0.08em;
+}
+
+.blockLabelDark {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: #04120b;
+  letter-spacing: 0.08em;
+}
+
+.readout {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  fill: var(--ink);
+  letter-spacing: 0.04em;
+}
+
+.readoutDim {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  fill: var(--desk);
+  letter-spacing: 0.04em;
+}
+
+.navDot {
+  fill: var(--desk);
+  opacity: 0.35;
+}
+
+.pulseRing {
+  fill: none;
+  stroke: currentColor;
+  color: var(--alex);
+  stroke-width: 1;
+  opacity: 0.4;
+}
+
+.tagResize,
+.tagSkip {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+}
+
+.tagResize {
+  fill: var(--desk);
+}
+
+.tagSkip {
+  fill: var(--loss);
+}

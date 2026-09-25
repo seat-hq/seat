@@ -1,0 +1,65 @@
+:root {
+  /* Surfaces: a deep green ledger, with cream paper for quiet sections. */
+  --void: #050f0a;
+  --bg: #07140e;
+  --bg-2: #0b1f16;
+  --panel: #0f2a1e;
+  --panel-2: #12351f;
+  --line: #1c3b2c;
+  --line-2: #2a5540;
+  --paper: #f4f1e8;
+  --paper-2: #e9e4d6;
+  --paper-ink: #0b1f16;
+  --paper-dim: #4d5f55;
+  --paper-line: #cfc8b4;
+
+  /* Ink. */
+  --ink: #eaf5ee;
+  --ink-dim: #9bb8a6;
+  --ink-faint: #5f7d6b;
+
+  /* Semantics. Desk things are green. Alex things are amber. Losses are coral. */
+  --desk: #35d07f;
+  --desk-soft: rgba(53, 208, 127, 0.14);
+  --alex: #e0b341;
+  --alex-soft: rgba(224, 179, 65, 0.14);
+  --loss: #e3715a;
+  --loss-soft: rgba(227, 113, 90, 0.14);
+  --focus: #9ff0c4;
+
+  /* Type. */
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-ui: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.15vw, 1.05rem);
+  --step-1: clamp(1.15rem, 1.08rem + 0.35vw, 1.35rem);
+  --step-2: clamp(1.4rem, 1.25rem + 0.8vw, 1.95rem);
+  --step-3: clamp(1.85rem, 1.5rem + 1.7vw, 3rem);
+  --step-4: clamp(2.4rem, 1.8rem + 3vw, 4.6rem);
+  --step-5: clamp(3rem, 2rem + 5.4vw, 7.6rem);
+  --step-6: clamp(3.4rem, 1.9rem + 8vw, 11rem);
+
+  /* Space and layout. */
+  --gutter: clamp(1.1rem, 0.6rem + 2.4vw, 2.75rem);
+  --maxw: 1320px;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --nav-h: 64px;
+
+  /* Motion. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-1: 160ms;
+  --dur-2: 320ms;
+  --dur-3: 640ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 0ms;
+    --dur-2: 0ms;
+    --dur-3: 0ms;
+  }
+}

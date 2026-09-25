@@ -1,4 +1,4 @@
-.PHONY: install build test paper deploy-testnet deploy-mainnet deploy-phase2 app-dev keeper-testnet keeper-mainnet write-addresses
+.PHONY: install build test paper deploy-testnet deploy-mainnet deploy-phase2 app-dev site-dev site-build keeper-testnet keeper-mainnet write-addresses
 
 # Foundry is installed to ~/.foundry/bin; make does not inherit an interactive PATH.
 export PATH := $(HOME)/.foundry/bin:$(PATH)
@@ -38,6 +38,12 @@ write-addresses:
 
 app-dev:
 	pnpm --filter @seat/app dev
+
+site-dev:
+	pnpm --filter @seat/site dev
+
+site-build:
+	pnpm --filter @seat/site build
 
 # Paper executor unless live guards pass (no cited 46630 router).
 keeper-testnet:

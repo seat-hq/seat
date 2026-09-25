@@ -1,0 +1,228 @@
+.sec {
+  background-color: var(--bg);
+}
+
+.head {
+  display: grid;
+  gap: 1.4rem;
+  max-width: 900px;
+}
+
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend i {
+  display: inline-block;
+  width: 28px;
+  height: 0;
+  border-top: 2px solid var(--desk);
+}
+
+.legend li[data-kind="signal"] i {
+  border-top: 2px dashed var(--alex);
+}
+
+.legend li[data-kind="signal"] {
+  color: var(--alex);
+}
+
+.legend li[data-kind="capital"] {
+  color: var(--desk);
+}
+
+.neq {
+  font-size: 1.3rem;
+  color: var(--ink);
+}
+
+.fig {
+  margin: 3.5rem 0 0;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .svg {
+    display: block;
+  }
+}
+
+.lists {
+  margin-top: 2rem;
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 900px) {
+  .lists {
+    grid-template-columns: 1fr 1fr;
+    color: var(--ink-dim);
+    font-size: 0.92rem;
+  }
+}
+
+.lists ol {
+  margin: 0.8rem 0 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.listTitle {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.listTitle[data-kind="signal"] {
+  color: var(--alex);
+}
+
+.listTitle[data-kind="capital"] {
+  color: var(--desk);
+}
+
+.never {
+  grid-column: 1 / -1;
+  padding: 1rem 1.2rem;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+}
+
+/* SVG */
+.laneSignal {
+  fill: rgba(224, 179, 65, 0.035);
+  stroke: rgba(224, 179, 65, 0.25);
+  stroke-dasharray: 4 6;
+}
+
+.laneCapital {
+  fill: rgba(53, 208, 127, 0.035);
+  stroke: rgba(53, 208, 127, 0.25);
+}
+
+.laneLabel {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  fill: var(--ink-faint);
+}
+
+.signalPath {
+  fill: none;
+  stroke: var(--alex);
+  stroke-width: 1.8;
+  stroke-dasharray: 5 6;
+}
+
+.capitalPath {
+  fill: none;
+  stroke: var(--desk);
+  stroke-width: 2.4;
+}
+
+.pathLabel,
+.pathLabelSig {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--ink-dim);
+}
+
+.pathLabelSig {
+  fill: var(--alex);
+}
+
+.node rect {
+  fill: var(--bg);
+  stroke-width: 1.5;
+}
+
+.node[data-kind="alex"] rect {
+  stroke: var(--alex);
+}
+
+.node[data-kind="engine"] rect {
+  stroke: var(--ink-dim);
+  stroke-dasharray: 4 4;
+}
+
+.node[data-kind="desk"] rect {
+  stroke: var(--desk);
+  fill: #0b2419;
+}
+
+.node[data-kind="you"] rect {
+  stroke: var(--paper);
+}
+
+.nodeLabel {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.nodeSub {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  fill: var(--ink-dim);
+}
+
+.noPath {
+  stroke: var(--loss);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 6;
+  opacity: 0.7;
+}
+
+.noPathBadge {
+  fill: var(--bg);
+  stroke: var(--loss);
+}
+
+.noPathX {
+  stroke: var(--loss);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.noPathLabel {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  fill: var(--loss);
+}
+
+.noPathSub {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  fill: var(--ink-dim);
+}
+
+.pSignal {
+  fill: var(--alex);
+}
+
+.pCapital {
+  fill: var(--desk);
+}

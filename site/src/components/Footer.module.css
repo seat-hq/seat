@@ -1,0 +1,99 @@
+.footer {
+  background: var(--void);
+  border-top: 1px solid var(--line);
+  padding: clamp(3.5rem, 2rem + 5vw, 6rem) 0 2rem;
+  font-size: 0.92rem;
+}
+
+.top {
+  display: grid;
+  gap: 3rem;
+}
+
+@media (min-width: 860px) {
+  .top {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+.tag {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  margin-top: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.small {
+  color: var(--ink-dim);
+  margin-top: 0.8rem;
+  max-width: 44ch;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.colTitle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.cols ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.cols a {
+  color: var(--ink-dim);
+  text-decoration: none;
+}
+
+.cols a:hover,
+.cols a:focus-visible {
+  color: var(--ink);
+}
+
+.off {
+  color: var(--ink-faint);
+}
+
+.disclaimer {
+  margin-top: 3.5rem;
+  padding: 1.4rem 1.5rem;
+  border: 1px dashed color-mix(in srgb, var(--alex) 55%, transparent);
+  border-radius: var(--radius);
+  color: var(--ink-dim);
+  display: grid;
+  gap: 0.8rem;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.disclaimer strong {
+  color: var(--alex);
+  font-weight: 600;
+}
+
+.bottom {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+}
+
+.bottom a {
+  color: var(--ink-dim);
+}
