@@ -39,6 +39,7 @@ export function MotionBoot() {
       mq.removeEventListener("change", onChange);
     };
   }, [pathname]);
+
   return null;
 }
 

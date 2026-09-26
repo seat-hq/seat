@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ScrollTrigger as ST } from "gsap/ScrollTrigger";
 import { getGsap } from "@/motion/gsap";
-import { useMediaQuery, useReducedMotion } from "@/motion/hooks";
+import { useInitialMediaQuery, useReducedMotion } from "@/motion/hooks";
 import { EXAMPLE_LABEL } from "@/lib/story";
 import { beats, STAGES, type Beat } from "./beats";
 import { AlexPanel, VaultPanel } from "./Panels";
@@ -97,8 +97,9 @@ function Pinned() {
     });
     stRef.current = st;
     return () => {
-      st.kill();
+      st.kill(true);
       stRef.current = null;
+      ScrollTrigger.refresh();
     };
   }, []);
 
@@ -208,7 +209,7 @@ function Stacked() {
 }
 
 export function Story() {
-  const wide = useMediaQuery("(min-width: 1024px) and (min-height: 700px)");
+  const wide = useInitialMediaQuery("(min-width: 1024px) and (min-height: 700px)");
   const reduced = useReducedMotion();
   const pinned = wide === true && reduced === false;
 

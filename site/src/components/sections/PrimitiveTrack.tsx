@@ -1,14 +1,14 @@
 "use client";
 
 import { useRef, useState, type ReactNode } from "react";
-import { useGsap, useMediaQuery } from "@/motion/hooks";
+import { useGsap, useInitialMediaQuery } from "@/motion/hooks";
 import type { PrimitiveStep } from "./Primitive";
 import styles from "./Primitive.module.css";
 
 /** Pins the six-step strip on wide screens and walks through it with scroll. */
 export function PrimitiveTrack({ steps, children }: { steps: readonly PrimitiveStep[]; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
-  const wide = useMediaQuery("(min-width: 980px)") === true;
+  const wide = useInitialMediaQuery("(min-width: 980px)") === true;
   const [active, setActive] = useState(-1);
 
   useGsap(

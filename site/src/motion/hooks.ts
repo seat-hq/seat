@@ -20,14 +20,34 @@ export function useReducedMotion(): boolean | null {
   return reduced;
 }
 
+/**
+ * Reads the query once after mount. Intentionally ignores resize/orientation so
+ * GSAP-pinned layouts are not torn down mid-session (prevents DOM sync crashes).
+ */
+export function useInitialMediaQuery(query: string): boolean | null {
+  const [match, setMatch] = useState<boolean | null>(null);
+  useEffect(() => {
+    setMatch(window.matchMedia(query).matches);
+  }, [query]);
+  return match;
+}
+
 export function useMediaQuery(query: string): boolean | null {
   const [match, setMatch] = useState<boolean | null>(null);
   useEffect(() => {
     const mq = window.matchMedia(query);
     const update = (): void => setMatch(mq.matches);
     update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    let debounce: ReturnType<typeof setTimeout> | undefined;
+    const onChange = (): void => {
+      clearTimeout(debounce);
+      debounce = setTimeout(update, 120);
+    };
+    mq.addEventListener("change", onChange);
+    return () => {
+      mq.removeEventListener("change", onChange);
+      clearTimeout(debounce);
+    };
   }, [query]);
   return match;
 }

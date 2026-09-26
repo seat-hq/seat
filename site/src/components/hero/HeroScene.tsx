@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useGsap, useInView, useMediaQuery } from "@/motion/hooks";
+import { useGsap, useInView, useInitialMediaQuery } from "@/motion/hooks";
 import styles from "./Hero.module.css";
 
 type Pt = readonly [number, number];
@@ -50,8 +50,7 @@ const V: Geo = {
 
 const GATES = ["ASSET", "SESSION", "SIZE"] as const;
 
-export function HeroScene() {
-  const vertical = useMediaQuery("(max-width: 720px)") === true;
+function HeroSceneGraphic({ vertical }: { readonly vertical: boolean }) {
   const g = vertical ? V : H;
   const root = useRef<SVGSVGElement>(null);
   const inView = useInView(root);
@@ -300,4 +299,12 @@ export function HeroScene() {
       </text>
     </svg>
   );
+}
+
+export function HeroScene() {
+  const mq = useInitialMediaQuery("(max-width: 720px)");
+  if (mq === null) {
+    return <HeroSceneGraphic vertical={false} />;
+  }
+  return <HeroSceneGraphic vertical={mq} />;
 }
